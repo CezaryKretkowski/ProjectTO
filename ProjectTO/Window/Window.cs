@@ -5,8 +5,12 @@ using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using ProjectTo.Common;
+using ProjectTo.Gui.Interfaces;
+using ProjectTo.Modules.GuiEditor;
+using ProjectTo.Modules.MainWindow;
+using ProjectTo.Modules.Scene;
 using ProjectTo.RenderEngine;
-using Vector2 = System.Numerics.Vector2;
+
 
 namespace ProjectTo.Window;
 
@@ -14,7 +18,8 @@ public class Window : GameWindow
 {
     private static Window? _instance;
     private readonly ImGuiController _controller;
-    private FrameBuffer _frameBuffer;
+    private readonly FrameBuffer _frameBuffer;
+    private readonly List<IGui> _modules;
 
     private Window(int width, int height, string title) : base(GameWindowSettings.Default, new NativeWindowSettings()
     {
@@ -25,18 +30,25 @@ public class Window : GameWindow
     })
     {
         _controller = new ImGuiController(ClientSize.X, ClientSize.Y);
-        _frameBuffer = new FrameBuffer(ClientSize.X, ClientSize.Y); 
+        _frameBuffer = new FrameBuffer(ClientSize.X, ClientSize.Y);
+        _modules = new List<IGui>();
     }
     
     public static Window Instance(int width, int height, string title)
     {
         return _instance ??= new Window(width, height, title);
     }
+    public static Window Instance()
+    {
+        return _instance ??= new Window(800, 600, "test");
+    }
     
     protected override void OnLoad()
     {
         base.OnLoad();
-        
+        _modules.Add(new SceneGui(_frameBuffer));
+        _modules.Add(new MainMenuBar());
+        _modules.Add(new ShaderEditorGui());
         GL.ClearColor(0.0f, 0.0f, 0.4f, 0.0f);
         GL.Enable(EnableCap.DepthTest);
         GL.DepthFunc(DepthFunction.Less);
@@ -50,21 +62,11 @@ public class Window : GameWindow
         _controller.Update(this, (float)e.Time);
         GL.ClearColor(0.0f, 0.0f, 0.4f, 0.0f);
         ImGui.DockSpaceOverViewport();
-        ImGui.BeginMainMenuBar();
-        ImGui.MenuItem("File");
-        ImGui.MenuItem("Save");
-        ImGui.EndMainMenuBar();        
-        ImGui.Begin("Scene");
-        ImGui.BeginChild("Render"); 
-        _frameBuffer.Bind();
-        GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
         
-        _frameBuffer.Unbind();
-        
-        ImGui.Image(_frameBuffer.Texture,ImGui.GetWindowSize(),new Vector2(0,1),new Vector2(1,0));
-
-        ImGui.EndChild();
-        ImGui.End();
+        foreach (var module in _modules)
+        {
+            module.OnRender();
+        }
 
         GL.Finish();
         _controller.Render();
@@ -90,6 +92,7 @@ public class Window : GameWindow
     {
         base.OnResize(e);
         GL.Viewport(0, 0, ClientSize.X, ClientSize.Y);
+        _controller.WindowResized(ClientSize.X, ClientSize.Y);
        
     }
     protected sealed override void OnUnload()
