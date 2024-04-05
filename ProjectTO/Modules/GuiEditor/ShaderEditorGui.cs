@@ -1,6 +1,7 @@
 using System.Numerics;
 using ImGuiNET;
 using ProjectTo.Gui.Interfaces;
+using ProjectTo.Modules.GuiEditor.InputOutput;
 
 namespace ProjectTo.Modules.GuiEditor;
 
@@ -9,7 +10,17 @@ public class ShaderEditorGui : IGui
     private Vector2 _nodePose = new Vector2(0,0);
     private readonly Dictionary<Guid, Node> _nodes = new Dictionary<Guid, Node>();
 
-    
+    public void TryAttach(IForm output)
+    {
+        foreach (var node in _nodes.Values)
+        {
+            foreach (var input in node.Inputs)
+            {
+                input.AttachOutput(output);
+            }
+        }
+    }
+
     public ShaderEditorGui()
     {
        
@@ -20,7 +31,7 @@ public class ShaderEditorGui : IGui
     public void AndNode(Vector2 pos)
     {
         var id = Guid.NewGuid();
-        _nodes.Add(id,new Node(id,pos));
+        _nodes.Add(id,new Node(id,pos,this));
     }
 
     private void DisplayGrid(int gridSize)

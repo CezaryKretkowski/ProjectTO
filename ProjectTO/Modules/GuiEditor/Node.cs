@@ -1,59 +1,77 @@
 using System.Numerics;
 using ImGuiNET;
 using OpenTK.Graphics.ES20;
+using ProjectTo.Modules.GuiEditor.InputOutput;
 
 namespace ProjectTo.Modules.GuiEditor;
 
 public class Node
 {
-    protected record DrawCircleStruct(Vector2 Point, float Radius,uint Color);
+    public ShaderEditorGui _parent;
+    public record DrawCircleStruct(Vector2 Point, float Radius,uint Color);
+    public record DrawBezierStruct(Vector2 Point1,Vector2 Point2,uint Color);
     public String ID { get; init; }
     public string Title { get; set; } = "New Node";
     public Vector4 HeaderColor { get; set; } = new Vector4(0.16f, 0.29f, 0.48f, 1.0f);
     public Vector4 BorderColor { get; set; } = new Vector4(0.7f, 0.7f, 0.7f, 1f);
     public Vector4 BackGroundColor { get; set; } = new Vector4(0.24f, 0.24f, 0.27f, 1f);
+    public Vector2 Size { get; set; } = new Vector2(200,150);
+    
+    public bool TryAttach { get; set; }
 
     protected List<DrawCircleStruct> _circleDrawList;
-
+    protected List<DrawBezierStruct> _bezierDrawList;
     protected Vector2 _winPos = new Vector2(50,50);
-    
-    
-    public Node(Guid id,Vector2 winMenu)
+
+    protected List<IForm> _inputs;
+    protected IForm _output;
+
+    public List<IForm> Inputs
+    {
+        get { return _inputs; }
+    }
+
+    public Node(Guid id,Vector2 winMenu,ShaderEditorGui menu)
     {
         _winPos = winMenu;
         ID = id.ToString();
         _circleDrawList = new List<DrawCircleStruct>();
+        _bezierDrawList = new List<DrawBezierStruct>();
+        _inputs = new List<IForm>();
+        var input1 = new Input<float>(this);
+        var input2 = new Input<string>(this);
+        _inputs.Add(input1);
+        _inputs.Add(input2);
+        _output = new Output<float>(this);
+        _parent = menu;
     }
-    public Node(Guid id)
+    public Node(Guid id,ShaderEditorGui menu)
     {
         ID = id.ToString();
         _circleDrawList = new List<DrawCircleStruct>();
+        _bezierDrawList = new List<DrawBezierStruct>();
+        _parent = menu;
     }
 
-    protected void AddCircle(DrawCircleStruct param)
+    public void AddCircle(DrawCircleStruct param)
     {
         _circleDrawList.Add(param);
     }
 
-    protected virtual void DrawInput()
+    public void AddBezier(DrawBezierStruct bezier)
     {
-        
-        
-        
-        
-        float param = 0.01f;
-        ImGui.InputFloat("Input 1",ref param);
-        var point = ImGui.GetWindowPos();
-        point.X -= 8.0f;
-        point.Y += 9.0f;
-        AddCircle(new DrawCircleStruct(point,6.0f,ImGui.GetColorU32(new Vector4(0.93f,0.84f,0.35f,1))));
-        
-        
+        _bezierDrawList.Add(bezier);
     }
+
 
     protected virtual void DrawNodeContent()
     {
-        DrawInput();
+       
+        foreach (var input in _inputs)
+        {
+            input.DrawInput();
+        }
+        _output.DrawInput();
     }
 
     public void DrawNode()
@@ -68,7 +86,7 @@ public class Node
         ImGui.PushStyleVar(ImGuiStyleVar.ChildRounding,6.0f);
       
       
-        ImGui.BeginChild(ID,new Vector2(200,100),ImGuiChildFlags.Border);
+        ImGui.BeginChild(ID,Size,ImGuiChildFlags.Border);
             var winPos = ImGui.GetWindowPos();
             
             ImGui.PushStyleColor(ImGuiCol.Button,HeaderColor);
@@ -104,7 +122,21 @@ public class Node
         {
             ImGui.GetWindowDrawList().AddCircleFilled(circle.Point,circle.Radius,circle.Color);
         }
+
+        foreach (var line in _bezierDrawList)
+        {
+            ImGui.GetWindowDrawList().AddLine(line.Point1,line.Point2,line.Color);
+        }
+
+        if (TryAttach)
+        {
+            _parent.TryAttach(_output);
+
+            TryAttach = false;
+        }
+
         _circleDrawList.Clear();
+        _bezierDrawList.Clear();
         _winPos = winPos;
         ImGui.PopStyleVar();
         ImGui.PopStyleColor(2);
