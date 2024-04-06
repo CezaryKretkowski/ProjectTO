@@ -2,12 +2,13 @@ using System.Numerics;
 using ImGuiNET;
 using OpenTK.Graphics.ES20;
 using ProjectTo.Modules.GuiEditor.InputOutput;
+using ProjectTO.Modules.GuiEditor.Shader;
 
 namespace ProjectTo.Modules.GuiEditor;
 
 public class Node
 {
-    public ShaderEditorGui _parent;
+    public Shader _parent;
     public record DrawCircleStruct(Vector2 Point, float Radius,uint Color);
     public record DrawBezierStruct(Vector2 Point1,Vector2 Point2,uint Color);
     public String ID { get; init; }
@@ -31,7 +32,7 @@ public class Node
         get { return _inputs; }
     }
 
-    public Node(Guid id,Vector2 winMenu,ShaderEditorGui menu)
+    public Node(Guid id,Vector2 winMenu,Shader menu)
     {
         _winPos = winMenu;
         ID = id.ToString();
@@ -45,7 +46,7 @@ public class Node
         _output = new Output<float>(this);
         _parent = menu;
     }
-    public Node(Guid id,ShaderEditorGui menu)
+    public Node(Guid id,Shader menu)
     {
         ID = id.ToString();
         _circleDrawList = new List<DrawCircleStruct>();

@@ -2,6 +2,7 @@ using System.Numerics;
 using ImGuiNET;
 using ProjectTo.Gui.Interfaces;
 using ProjectTo.Modules.GuiEditor.InputOutput;
+using ProjectTO.Modules.GuiEditor.Shader;
 
 namespace ProjectTo.Modules.GuiEditor;
 
@@ -10,29 +11,18 @@ public class ShaderEditorGui : IGui
     private Vector2 _nodePose = new Vector2(0,0);
     private readonly Dictionary<Guid, Node> _nodes = new Dictionary<Guid, Node>();
 
-    public void TryAttach(IForm output)
-    {
-        foreach (var node in _nodes.Values)
-        {
-            foreach (var input in node.Inputs)
-            {
-                input.AttachOutput(output);
-            }
-        }
-    }
+    
+    private readonly VertexShader vertexShader;
+    private readonly FramgentShader famgentShader;
 
     public ShaderEditorGui()
     {
-       
-        AndNode(new Vector2(50,50));
-        AndNode(new Vector2(50,50));
+        vertexShader = new VertexShader();  
+        vertexShader.AndNode(new Vector2(50,50));
+        vertexShader.AndNode(new Vector2(50,50));
         
     }
-    public void AndNode(Vector2 pos)
-    {
-        var id = Guid.NewGuid();
-        _nodes.Add(id,new Node(id,pos,this));
-    }
+
 
     private void DisplayGrid(int gridSize)
     {
@@ -64,10 +54,7 @@ public class ShaderEditorGui : IGui
             ImGui.BeginChild("menu");
                 DisplayGrid(32);
 
-                foreach (var node in _nodes)
-                {
-                    node.Value.DrawNode();
-                }
+                vertexShader.DrawNodes();
                 
      
             ImGui.EndChild();
