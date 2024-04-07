@@ -48,6 +48,7 @@ public class Output<T> : IForm
         {
             IsDrawing = false;
         }
+        TryDetach();
     }
 
     public void DrawLine()
@@ -69,5 +70,15 @@ public class Output<T> : IForm
     public Type GetTType()
     {
         return typeof(T);
+    }
+
+    public void TryDetach()
+    {
+        
+    }
+
+    public Guid GetParentId()
+    {
+        return _parent.ID;
     }
 }

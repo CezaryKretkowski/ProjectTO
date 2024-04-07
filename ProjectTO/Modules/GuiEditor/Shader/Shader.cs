@@ -17,7 +17,7 @@ namespace ProjectTO.Modules.GuiEditor.Shader
         public void AndNode(Vector2 pos)
         {
             var id = Guid.NewGuid();
-            _nodes.Add(id, new Node(id, pos, this));
+            _nodes.Add(id, new FunctionNode(id, pos, this));
         }
       
         public void TryAttach(IForm output)

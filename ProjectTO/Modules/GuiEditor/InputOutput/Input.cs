@@ -60,6 +60,7 @@ public class Input<T> :IForm
         point.Y += mg+10.0f;
         _parent.AddCircle(new Node.DrawCircleStruct(point,6.0f,ImGui.GetColorU32(new Vector4(0.93f,0.84f,0.35f,1))));
         _point = point;
+        TryDetach();
        
     }
 
@@ -84,5 +85,21 @@ public class Input<T> :IForm
     public Type GetTType()
     {
         return typeof(T);
+    }
+
+    public void TryDetach()
+    {
+        var mousePosition = ImGui.GetMousePos();
+        if (mousePosition.X > _point.X - 6.0f && mousePosition.X < _point.X + 6.0f &&
+            mousePosition.Y > _point.Y - 6.0f && mousePosition.Y < _point.Y + 6.0f &&
+            ImGui.IsMouseClicked(ImGuiMouseButton.Right))
+        {
+            Output = null;
+        }
+    }
+
+    public Guid GetParentId()
+    {
+        return _parent.ID;
     }
 }
