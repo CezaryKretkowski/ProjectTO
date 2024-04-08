@@ -11,16 +11,18 @@ public class ShaderEditorGui : IGui
     private Vector2 _nodePose = new Vector2(0,0);
     private readonly Dictionary<Guid, Node> _nodes = new Dictionary<Guid, Node>();
 
-    
+    private string[] Items { get; set; }
+    private int _displayIndex = -1;
     private readonly VertexShader vertexShader;
-    private readonly FramgentShader famgentShader;
+    private readonly FramgentShader fragmentShader;
 
     public ShaderEditorGui()
     {
         vertexShader = new VertexShader();  
+        fragmentShader = new FramgentShader();  
         vertexShader.AndNode(new Vector2(50,50));
         vertexShader.AndNode(new Vector2(50,50));
-        
+        Items = new[] { "Vertex Shader", "Fragment Shader" };
     }
 
 
@@ -47,14 +49,29 @@ public class ShaderEditorGui : IGui
 
     public void OnRender()
     {
+        ImGui.Begin("Inspector");
+
+        for(var i = 0; i<Items.Length;i++)
+        {
+                ImGui.Selectable(Items[i],(i==_displayIndex));
+                if (ImGui.IsItemClicked())
+                {
+                    _displayIndex = i;
+                }
+        }
         
+
+        ImGui.End();
         ImGui.Begin("Node");
         
             ImGui.PushStyleColor(ImGuiCol.ChildBg,new Vector4(0.24f, 0.24f, 0.27f, 0.68f));
             ImGui.BeginChild("menu");
                 DisplayGrid(32);
-
-                vertexShader.DrawNodes();
+                if(_displayIndex==0) 
+                    vertexShader.DrawNodes();
+                else
+                    fragmentShader.DrawNodes();                
+                
                 
      
             ImGui.EndChild();

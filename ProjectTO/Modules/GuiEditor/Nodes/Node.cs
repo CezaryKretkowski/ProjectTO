@@ -8,7 +8,7 @@ namespace ProjectTo.Modules.GuiEditor;
 
 public class Node
 {
-    private Shader _parent;
+    protected readonly Shader _parent;
     public record DrawCircleStruct(Vector2 Point, float Radius,uint Color);
     public record DrawBezierStruct(Vector2 Point1,Vector2 Point2,uint Color);
 
@@ -26,12 +26,12 @@ public class Node
     private List<DrawBezierStruct> _bezierDrawList;
     private Vector2 _winPos;
 
-    protected List<IForm> _inputs;
-    protected IForm _output;
+    //protected readonly List<IForm> _inputs;
+   // protected IForm _output;
     
-    public List<IForm> Inputs
+    public virtual List<IForm> Inputs
     {
-        get { return _inputs; }
+        get { return new List<IForm>(); }
     }
 
     public Node(Guid id,Vector2 winMenu,Shader menu)
@@ -42,7 +42,7 @@ public class Node
         ID = id;
         _circleDrawList = new List<DrawCircleStruct>();
         _bezierDrawList = new List<DrawBezierStruct>();
-        _inputs = new List<IForm>();
+        //_inputs = new List<IForm>();
         _parent = menu;
     }
     public Node(Guid id,Shader menu)
@@ -70,11 +70,11 @@ public class Node
     protected virtual void DrawNodeContent()
     {
        
-        foreach (var input in _inputs)
-        {
-            input.DrawInput();
-        }
-        _output.DrawInput();
+        // foreach (var input in _inputs)
+        // {
+        //     input.DrawInput();
+        // }
+        //_output.DrawInput();
     }
 
     private void DrawHeaderAndCircle()
@@ -122,10 +122,10 @@ public class Node
         ImGui.EndChild(); 
         DrawHeaderAndCircle();
         
-
+        
         if (TryAttach)
-        {
-            _parent.TryAttach(_output);
+        {   
+            TryAttached();
             TryAttach = false;
         }
 
@@ -139,6 +139,10 @@ public class Node
         ImGui.PopStyleVar();
         ImGui.PopStyleColor(2);
         
+    }
+
+    public virtual void TryAttached()
+    {
     }
 
     private Vector2 SaveMousPos(Vector2 winPos,Vector2 size)

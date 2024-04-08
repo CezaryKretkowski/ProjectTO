@@ -22,12 +22,9 @@ namespace ProjectTO.Modules.GuiEditor.Shader
       
         public void TryAttach(IForm output)
         {
-            foreach (var node in _nodes.Values)
+            foreach (var input in _nodes.Values.Where(node => !node.ID.Equals(output.GetParentId())).SelectMany(node => node.Inputs))
             {
-                foreach (var input in node.Inputs)
-                {
-                    input.AttachOutput(output);
-                }
+                input.AttachOutput(output);
             }
         }
 
