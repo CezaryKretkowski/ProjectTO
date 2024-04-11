@@ -6,6 +6,7 @@ using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using ProjectTo.Common;
 using ProjectTo.Gui.Interfaces;
+using ProjectTo.Modules.GraphicApi;
 using ProjectTo.Modules.GuiEditor;
 using ProjectTo.Modules.MainWindow;
 using ProjectTo.Modules.Scene;
@@ -20,6 +21,7 @@ public class Window : GameWindow
     private readonly ImGuiController _controller;
     private readonly FrameBuffer _frameBuffer;
     private readonly List<IGui> _modules;
+    private readonly DataBaseInterface _dataBaseInterface;
 
     private Window(int width, int height, string title) : base(GameWindowSettings.Default, new NativeWindowSettings()
     {
@@ -32,6 +34,7 @@ public class Window : GameWindow
         _controller = new ImGuiController(ClientSize.X, ClientSize.Y);
         _frameBuffer = new FrameBuffer(ClientSize.X, ClientSize.Y);
         _modules = new List<IGui>();
+        _dataBaseInterface = DataBaseInterface.Instance;
     }
     
     public static Window Instance(int width, int height, string title)

@@ -1,6 +1,7 @@
 using System.Numerics;
 using ProjectTo.Modules.GuiEditor.InputOutput;
 using ProjectTO.Modules.GuiEditor.Shader;
+using ProjectTo.Modules.InputManager.Implementation;
 
 namespace ProjectTo.Modules.GuiEditor;
 
@@ -10,8 +11,8 @@ public class FunctionNode:Node
     IForm _output;
     public FunctionNode(Guid id, Vector2 winMenu, Shader menu) : base(id, winMenu, menu)
     {
-        var input1 = new Input<float>(this);
-        var input2 = new Input<string>(this);
+        var input1 = new Input<float>(this,new FloatInputHandler());
+        var input2 = new Input<string>(this,new StringInputHandler());
         _inputs = new List<IForm>
         {
             input1,

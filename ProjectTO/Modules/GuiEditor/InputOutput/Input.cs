@@ -1,6 +1,7 @@
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using ImGuiNET;
+using ProjectTo.Modules.InputManager;
 
 namespace ProjectTo.Modules.GuiEditor.InputOutput;
 
@@ -13,22 +14,23 @@ public class Input<T> :IForm
         set { _value = value; }
     }
 
+    public IInputHandler<T> InputHandler { get; set; }
     protected Vector2 _point;
     public T? _value;
     public string Name { get; init; } = "Input1";
     public  Output<T>? Output { get; set; }
     protected readonly Node _parent;
 
-    public Input(Node parent)
+    public Input(Node parent,IInputHandler<T> inputHandler)
     {
         _parent = parent;
+        InputHandler = inputHandler;
     }
 
     public void DrawLine()
     {
         if (Output != null)
         {
-           
                 _parent.AddBezier(new Node.DrawBezierStruct(_point, Output._point,
                     ImGui.GetColorU32(new Vector4(0.93f, 0.84f, 0.35f, 1))));
         }
@@ -36,20 +38,11 @@ public class Input<T> :IForm
 
     private void DrawForm()
     {
-        if (typeof(float) == typeof(T))
-        {
-            float var=0.0f;
-            ImGui.InputFloat(Name,ref var);
-            _value = (T)Convert.ChangeType(var, typeof(T));;
-        }
-
-        if (typeof(T)==typeof(string))
-        {
-            ImGui.Text(Name);
-        }
+        this. Value =InputHandler.HandleInput(Name);
         DrawLine();
     }
-    
+
+
     public void DrawInput()
     {
         float param = 0.01f;
