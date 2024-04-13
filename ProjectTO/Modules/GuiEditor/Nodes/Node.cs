@@ -14,7 +14,7 @@ public class Node
 
     public Guid ID { get; init; }
     private string Title { get; set; } = "New Node";
-    private Vector4 HeaderColor { get; set; } = new Vector4(0.16f, 0.29f, 0.48f, 1.0f);
+    protected Vector4 HeaderColor { get; set; } = new Vector4(0.16f, 0.29f, 0.48f, 1.0f);
     private Vector4 BorderColor { get; set; } = new Vector4(0.7f, 0.7f, 0.7f, 1f);
     private Vector4 BackGroundColor { get; set; } = new Vector4(0.24f, 0.24f, 0.27f, 1f);
     public Vector2 Size { get; set; } = new Vector2(200,150);

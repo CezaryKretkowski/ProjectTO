@@ -24,6 +24,8 @@ public class FunctionNode:Node
 
     public FunctionNode(Guid id, Shader menu) : base(id, menu)
     {
+       
+
     }
 
     public override List<IForm> Inputs => _inputs;

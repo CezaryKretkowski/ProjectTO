@@ -1,6 +1,7 @@
 using System.Numerics;
 using ImGuiNET;
 using ProjectTo.Gui.Interfaces;
+using ProjectTo.Modules.GraphicApi.DataModels;
 using ProjectTo.Modules.GuiEditor.InputOutput;
 using ProjectTO.Modules.GuiEditor.Shader;
 
@@ -19,9 +20,18 @@ public class ShaderEditorGui : IGui
     public ShaderEditorGui()
     {
         vertexShader = new VertexShader();  
-        fragmentShader = new FramgentShader();  
-        vertexShader.AndNode(new Vector2(50,50));
-        vertexShader.AndNode(new Vector2(50,50));
+        fragmentShader = new FramgentShader();
+        NodeDto node = new NodeDto() { 
+        Name = "type",
+        ShaderType = Types.In
+        };
+        NodeDto node1 = new NodeDto()
+        {
+            Name = "type1",
+            ShaderType = Types.Function
+        };
+        vertexShader.AndNode(node,new Vector2(50,50));
+        vertexShader.AndNode(node1,new Vector2(50,50));
         Items = new[] { "Vertex Shader", "Fragment Shader" };
     }
 

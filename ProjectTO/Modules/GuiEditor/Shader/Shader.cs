@@ -1,4 +1,6 @@
-﻿using ProjectTo.Modules.GuiEditor;
+﻿using ProjectTo.Modules.GraphicApi;
+using ProjectTo.Modules.GraphicApi.DataModels;
+using ProjectTo.Modules.GuiEditor;
 using ProjectTo.Modules.GuiEditor.InputOutput;
 using System;
 using System.Collections.Generic;
@@ -14,10 +16,10 @@ namespace ProjectTO.Modules.GuiEditor.Shader
     {
         protected readonly Dictionary<Guid, Node> _nodes = new Dictionary<Guid, Node>();
 
-        public void AndNode(Vector2 pos)
+        public void AndNode(NodeDto nodeDto ,Vector2 pos)
         {
-            var id = Guid.NewGuid();
-            _nodes.Add(id, new FunctionNode(id, pos, this));
+            var node = NodeFactory.Instance.CreateFunctionNode(nodeDto, pos, this);
+            _nodes.Add(node.ID, node);
         }
       
         public void TryAttach(IForm output)
