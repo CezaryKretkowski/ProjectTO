@@ -59,6 +59,7 @@ public class ShaderEditorGui : IGui
 
     public void OnRender()
     {
+        
         ImGui.Begin("Inspector");
 
         for(var i = 0; i<Items.Length;i++)

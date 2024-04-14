@@ -20,7 +20,8 @@ public class NodeFactory
     }
     public FunctionNode CreateFunctionNode(NodeDto node,Vector2 pos,Shader parent) {
         var id = Guid.NewGuid();
-        return new FunctionNode(id,pos, parent);
+        var functionNode =new FunctionNode(id,pos, parent);
+        return functionNode;
     }
 
     public InNode CreateInNode(NodeDto node, Vector2 pos, Shader parent)

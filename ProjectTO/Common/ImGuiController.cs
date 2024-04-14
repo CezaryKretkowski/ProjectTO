@@ -238,6 +238,7 @@ void main()
         private void UpdateImGuiInput(GameWindow wnd)
         {
             ImGuiIOPtr io = ImGui.GetIO();
+            
 
             MouseState MouseState = wnd.MouseState;
             KeyboardState KeyboardState = wnd.KeyboardState;
@@ -254,16 +255,20 @@ void main()
 
             foreach (Keys key in Enum.GetValues(typeof(Keys)))
             {
+      
                 if (key == Keys.Unknown)
                 {
                     continue;
                 }
                 io.AddKeyEvent(TranslateKey(key), KeyboardState.IsKeyDown(key));
+                AddCharactersKey(KeyboardState); 
+               
             }
+            
 
             foreach (var c in PressedChars)
             {
-                io.AddInputCharacter(c);
+               // io.AddInputCharacter(c);
             }
             PressedChars.Clear();
 
@@ -271,6 +276,106 @@ void main()
             io.KeyAlt = KeyboardState.IsKeyDown(Keys.LeftAlt) || KeyboardState.IsKeyDown(Keys.RightAlt);
             io.KeyShift = KeyboardState.IsKeyDown(Keys.LeftShift) || KeyboardState.IsKeyDown(Keys.RightShift);
             io.KeySuper = KeyboardState.IsKeyDown(Keys.LeftSuper) || KeyboardState.IsKeyDown(Keys.RightSuper);
+        }
+        bool canProvideKey = false;
+        private int timeRelesed = 0;
+        private int timerCount = 0;
+        private bool isShift = false;
+        private string Format(ImGuiKey key)
+        {
+            if (key >= ImGuiKey._0 && key <= ImGuiKey._9)
+            {
+                
+                var keycode = key.ToString().Substring(1);
+                if (isShift)
+                {
+                    return Translate(key);
+                }
+
+                return keycode;
+            }
+            
+            if(key==ImGuiKey.Space)
+                return Translate(key);
+            if (isShift)
+                return key.ToString();
+
+            return key.ToString().ToLower();
+        }
+
+        private string Translate(ImGuiKey key) {
+            switch (key)
+            {
+                case ImGuiKey._0 : return ")";
+                case ImGuiKey._1 : return "!";
+                case ImGuiKey._2 : return "@";
+                case ImGuiKey._3 : return "#";
+                case ImGuiKey._4 : return "$";
+                case ImGuiKey._5 : return "%";
+                case ImGuiKey._6 : return "^";
+                case ImGuiKey._7 : return "&";
+                case ImGuiKey._8 : return "*";
+                case ImGuiKey._9 : return "(";
+                case ImGuiKey.Space : return " ";
+
+                default: return key.ToString().ToLower();
+            }
+        }
+        private void AddCharactersKey(KeyboardState k)
+        {
+            
+            for (int i = (int)ImGuiKey.Space; i <= (int)ImGuiKey.Z; i++)
+            {
+                ImGuiKey key = (ImGuiKey)i;
+                if (ImGui.IsKeyPressed(key))
+                {
+                    if (canProvideKey)
+                    {
+                        if (key>ImGuiKey.Space && key <ImGuiKey._0)
+                        {
+                            return;
+                        }
+                        ImGui.GetIO().AddInputCharactersUTF8(Format(key));
+                        canProvideKey = false;
+                    }
+                    else
+                    {
+                        timerCount++;
+                        if (timerCount > 90000)
+                        {
+                            canProvideKey=true;
+                            timerCount = 0;
+                        }
+                    }
+                }
+                else
+                {
+                    timeRelesed++;
+                }
+
+                if (timeRelesed > 50000)
+                {
+                    timeRelesed = 0;
+                    canProvideKey =true;
+                }
+
+            }
+            if (ImGui.IsKeyDown(ImGuiKey.LeftShift) || ImGui.IsKeyDown(ImGuiKey.RightShift))
+            {
+                isShift = true;
+            }
+            else
+            {
+                isShift = false;
+            }
+            
+            if (k.IsKeyPressed(Keys.Period)&&canProvideKey)
+            {
+                ImGui.GetIO().AddInputCharactersUTF8(".");
+                ;canProvideKey = false;
+            }
+            
+
         }
 
         internal void PressChar(char keyChar)
@@ -437,7 +542,7 @@ void main()
 
             GL.Disable(EnableCap.Blend);
             GL.Disable(EnableCap.ScissorTest);
-
+            
             // Reset state
             GL.BindTexture(TextureTarget.Texture2D, prevTexture2D);
             GL.ActiveTexture((TextureUnit)prevActiveTexture);
@@ -557,7 +662,8 @@ void main()
                 return key - Keys.D0 + ImGuiKey._0;
 
             if (key >= Keys.A && key <= Keys.Z)
-                return key - Keys.A + ImGuiKey.A;
+                return  (int)key+(ImGuiKey.A - (int)Keys.A);
+
 
             if (key >= Keys.KeyPad0 && key <= Keys.KeyPad9)
                 return key - Keys.KeyPad0 + ImGuiKey.Keypad0;

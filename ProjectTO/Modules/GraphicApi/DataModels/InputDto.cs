@@ -1,6 +1,3 @@
 namespace ProjectTo.Modules.GraphicApi.DataModels;
 
-public class InputDto
-{
-    
-}
+public record InputDto(int Id ,string Name,string Dv,DataTypeDto DataTypeDto);

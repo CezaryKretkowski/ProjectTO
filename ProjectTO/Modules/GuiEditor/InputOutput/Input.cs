@@ -38,7 +38,7 @@ public class Input<T> :IForm
 
     private void DrawForm()
     {
-        this. Value =InputHandler.HandleInput(Name);
+        this. Value =InputHandler.HandleInput(Name,this.Value);
         DrawLine();
     }
 

@@ -62,7 +62,7 @@ public class Window : GameWindow
     protected override void OnRenderFrame(FrameEventArgs e)
     {
         base.OnRenderFrame(e);
-        _controller.Update(this, (float)e.Time);
+         _controller.Update(this, (float)e.Time);
         GL.ClearColor(0.0f, 0.0f, 0.4f, 0.0f);
         ImGui.DockSpaceOverViewport();
         
@@ -72,8 +72,9 @@ public class Window : GameWindow
         }
 
         GL.Finish();
-        _controller.Render();
-   
+        
+        _controller.Render(); 
+       
         SwapBuffers();
     }
     

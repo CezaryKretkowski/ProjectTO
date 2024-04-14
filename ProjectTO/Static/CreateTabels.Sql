@@ -68,6 +68,17 @@ Create Table Input(
        FOREIGN KEY (NodeId) REFERENCES Node(id)     
 );
 
+
+
 insert into Node values(1,'GL_Position',1);
 INSERT into Input values(1,'GL_Pos_VEC3','','6', '1');
 INSERT into Input values(2,'GL_Pos_W_Float','1.0f',6, 1);
+
+Create Table Output(
+                      id int primary key ,
+                      Name varchar(255) not null ,
+                      DataTypesId int not null ,
+                      NodeId int not null ,
+                      FOREIGN KEY (DataTypesId) REFERENCES DataTypes(id),
+                      FOREIGN KEY (NodeId) REFERENCES Node(id)
+);

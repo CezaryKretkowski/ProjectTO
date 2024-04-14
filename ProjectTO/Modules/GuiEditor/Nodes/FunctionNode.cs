@@ -43,4 +43,6 @@ public class FunctionNode:Node
     {
         _parent.TryAttach(_output);
     }
+    
+    
 }

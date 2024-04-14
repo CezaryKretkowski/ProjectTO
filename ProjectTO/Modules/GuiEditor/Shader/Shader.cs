@@ -18,7 +18,7 @@ namespace ProjectTO.Modules.GuiEditor.Shader
 
         public void AndNode(NodeDto nodeDto ,Vector2 pos)
         {
-            var node = NodeFactory.Instance.CreateFunctionNode(nodeDto, pos, this);
+            var node = NodeFactory.Instance.CreateNode(nodeDto, pos, this);
             _nodes.Add(node.ID, node);
         }
       
@@ -28,6 +28,11 @@ namespace ProjectTO.Modules.GuiEditor.Shader
             {
                 input.AttachOutput(output);
             }
+        }
+
+        public void Remove(Guid id)
+        {
+            _nodes.Remove(id);
         }
 
         public void DrawNodes() {
