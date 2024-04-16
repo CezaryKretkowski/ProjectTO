@@ -45,10 +45,10 @@ public class FunctionNode:Node
         }
     }
 
-    public override void TryAttached()
+    protected override void TryAttached()
     {
         if(_output!=null)
-            _parent.TryAttach(_output);
+            Parent.TryAttach(_output);
     }
     
     

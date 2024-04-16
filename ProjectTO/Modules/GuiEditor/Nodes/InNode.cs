@@ -51,13 +51,13 @@ public class InNode:Node
         }
     }
 
-    public override List<IForm> Inputs => new List<IForm>();
-    public override void TryAttached()
+
+    protected override void TryAttached()
     {
-        _parent.TryAttach(_output);
+        Parent.TryAttach(_output);
     }
 
-    public override void DrawSubMenuContent()
+    protected override void DrawSubMenuContent()
     {
         if(!_editTitle)
             if (ImGui.MenuItem("Rename"))

@@ -117,8 +117,7 @@ public class Input<T> :IForm
         {
             throw new ArgumentException($"Klasa {handlerClassName} nie implementuje wymaganego interfejsu {inputHandlerInterfaceType.Name}");
         }
-
-        // Utwórz instancję klasy handlera
+        
         dynamic inputHandlerInstance = Activator.CreateInstance(inputHandlerType);
         var input =new Input<T>(parent, inputHandlerInstance);
         input.Name = name;
