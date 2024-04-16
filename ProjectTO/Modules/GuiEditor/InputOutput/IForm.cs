@@ -11,4 +11,6 @@ public interface IForm
      Type GetTType();
      void TryDetach();
      Guid GetParentId();
+
+     void SetTitle(string title);
 }

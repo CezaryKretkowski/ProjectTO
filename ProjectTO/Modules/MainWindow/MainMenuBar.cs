@@ -8,8 +8,22 @@ public class MainMenuBar : IGui
     public void OnRender()
     {
         ImGui.BeginMainMenuBar();
-        ImGui.MenuItem("File");
-        ImGui.MenuItem("Save");
+        if (ImGui.BeginMenu("File"))
+        {
+            if (ImGui.BeginMenu("New Node"))
+            {
+                
+                ImGui.EndMenu();
+            }
+
+            if (ImGui.BeginMenu("Save"))
+            {
+                ImGui.EndMenu();
+            }
+
+            ImGui.EndMenu();
+        }
+        
         ImGui.EndMainMenuBar();
     }
 }

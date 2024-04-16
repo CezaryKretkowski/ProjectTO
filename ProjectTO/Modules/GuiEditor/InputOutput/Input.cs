@@ -14,10 +14,12 @@ public class Input<T> :IForm
         set { _value = value; }
     }
 
+    public string Title { get; set; }
+
     public IInputHandler<T> InputHandler { get; set; }
     protected Vector2 _point;
     public T? _value;
-    public string Name { get; init; } = "Input1";
+    public string Name { get; set; } = "Input"+Guid.NewGuid().ToString();
     public  Output<T>? Output { get; set; }
     protected readonly Node _parent;
 
@@ -94,5 +96,32 @@ public class Input<T> :IForm
     public Guid GetParentId()
     {
         return _parent.ID;
+    }
+
+    public void SetTitle(string title)
+    {
+        Title = title;
+    }
+
+    public static Input<T> CreateInputInstance(string handlerClassName, Node parent,string name)
+    {
+        Type inputHandlerType = Type.GetType(handlerClassName);
+         
+        if (inputHandlerType == null)
+        {
+            throw new ArgumentException($"Nie można znaleźć klasy o nazwie {handlerClassName}");
+        }
+        
+        Type inputHandlerInterfaceType = typeof(IInputHandler<>).MakeGenericType(typeof(T));
+        if (!inputHandlerInterfaceType.IsAssignableFrom(inputHandlerType))
+        {
+            throw new ArgumentException($"Klasa {handlerClassName} nie implementuje wymaganego interfejsu {inputHandlerInterfaceType.Name}");
+        }
+
+        // Utwórz instancję klasy handlera
+        dynamic inputHandlerInstance = Activator.CreateInstance(inputHandlerType);
+        var input =new Input<T>(parent, inputHandlerInstance);
+        input.Name = name;
+        return input;
     }
 }

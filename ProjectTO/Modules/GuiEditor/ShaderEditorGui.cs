@@ -1,6 +1,7 @@
 using System.Numerics;
 using ImGuiNET;
 using ProjectTo.Gui.Interfaces;
+using ProjectTo.Modules.GraphicApi;
 using ProjectTo.Modules.GraphicApi.DataModels;
 using ProjectTo.Modules.GuiEditor.InputOutput;
 using ProjectTO.Modules.GuiEditor.Shader;
@@ -11,13 +12,18 @@ public class ShaderEditorGui : IGui
 {
     private Vector2 _nodePose = new Vector2(0,0);
     private readonly Dictionary<Guid, Node> _nodes = new Dictionary<Guid, Node>();
-
+    public static ShaderEditorGui _instance;
+    public static ShaderEditorGui Instance
+    {
+        get { return _instance ??= new ShaderEditorGui(); }
+    }
     private string[] Items { get; set; }
-    private int _displayIndex = -1;
-    private readonly VertexShader vertexShader;
-    private readonly FramgentShader fragmentShader;
+    private int _displayIndex = 0;
+    private int _menuShowIndeks = 0;
+    public readonly VertexShader vertexShader;
+    public readonly FramgentShader fragmentShader;
 
-    public ShaderEditorGui()
+    private ShaderEditorGui()
     {
         vertexShader = new VertexShader();  
         fragmentShader = new FramgentShader();
@@ -30,8 +36,8 @@ public class ShaderEditorGui : IGui
             Name = "type1",
             ShaderType = Types.Function
         };
-        vertexShader.AndNode(node,new Vector2(50,50));
-        vertexShader.AndNode(node1,new Vector2(50,50));
+       // vertexShader.AndNode(node,new Vector2(50,50));
+       // vertexShader.AndNode(node1,new Vector2(50,50));
         Items = new[] { "Vertex Shader", "Fragment Shader" };
     }
 
@@ -55,10 +61,95 @@ public class ShaderEditorGui : IGui
         
     }
 
+    
 
+    public void OnWindowContexMenu()
+    {
+        if (ImGui.BeginPopupContextWindow())
+        {
+            
+            if (ImGui.BeginMenu("New function node"))
+            {
+                foreach (var nodes in DataBaseInterface.Instance.Nodes)
+                {
+                    if (ImGui.MenuItem(nodes.Name))
+                    {
+                        if (_displayIndex == 0)
+                        {
+                            vertexShader.AndNode(nodes,new Vector2(50,50));
+                        }
+                        else
+                        {
+                            fragmentShader.AndNode(nodes,new Vector2(50,50));
+                        }
+                    }
+                }
+                ImGui.EndMenu();
+            }
+            
+            if (ImGui.BeginMenu("New in node"))
+            {
+                foreach (var data in DataBaseInterface.Instance.Dictionary.Values)
+                {
+                    if (ImGui.MenuItem(data.GlslType))
+                    {
+                        var nodeDto = new NodeDto()
+                        {
+                            ShaderType = Types.In,
+                            Name = "New In",
+                            Outputs = new List<OutputDto>()
+                             {
+                                 new OutputDto(1,"Vec4",data)
+                             }
+                            
+                        };
+                        if (_displayIndex == 0)
+                        {
+                            vertexShader.AndNode(nodeDto,new Vector2(50,50));
+                        }
 
+                        else
+                        {
+                            fragmentShader.AndNode(nodeDto,new Vector2(50,50));
+                        }
+
+                    }
+                }
+                ImGui.EndMenu();
+            }
+        
+            if (ImGui.BeginMenu("New uniform node"))
+            {
+                foreach (var data in DataBaseInterface.Instance.Dictionary.Values)
+                {
+                    if (ImGui.MenuItem(data.GlslType))
+                    {
+                        
+                    }
+                }
+                ImGui.EndMenu();
+            }
+          
+            if (ImGui.BeginMenu("New out node"))
+            {
+                foreach (var data in DataBaseInterface.Instance.Dictionary.Values)
+                {
+                    if (ImGui.MenuItem(data.GlslType))
+                    {
+                        
+                    }
+                }
+                ImGui.EndMenu();
+            }
+            
+            
+        }
+
+    }
+    
     public void OnRender()
     {
+        
         
         ImGui.Begin("Inspector");
 
@@ -83,7 +174,7 @@ public class ShaderEditorGui : IGui
                 else
                     fragmentShader.DrawNodes();                
                 
-                
+                OnWindowContexMenu();
      
             ImGui.EndChild();
             ImGui.PopStyleColor();

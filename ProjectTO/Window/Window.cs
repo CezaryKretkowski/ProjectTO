@@ -51,7 +51,7 @@ public class Window : GameWindow
         base.OnLoad();
         _modules.Add(new SceneGui(_frameBuffer));
         _modules.Add(new MainMenuBar());
-        _modules.Add(new ShaderEditorGui());
+        _modules.Add(ShaderEditorGui.Instance);
         GL.ClearColor(0.0f, 0.0f, 0.4f, 0.0f);
         GL.Enable(EnableCap.DepthTest);
         GL.DepthFunc(DepthFunction.Less);

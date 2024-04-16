@@ -8,17 +8,18 @@ namespace ProjectTo.Modules.GuiEditor;
 public class FunctionNode:Node
 {
     readonly List<IForm> _inputs;
-    IForm _output;
+    public IForm? _output =null;
+
+    public void SetTitle(string title)
+    {
+        Title = title;
+    }
+
     public FunctionNode(Guid id, Vector2 winMenu, Shader menu) : base(id, winMenu, menu)
     {
-        var input1 = new Input<float>(this,new FloatInputHandler());
-        var input2 = new Input<string>(this,new StringInputHandler());
-        _inputs = new List<IForm>
-        {
-            input1,
-            input2
-        };
-        _output = new Output<float>(this);
+
+        _inputs = new List<IForm> { };
+
         
     }
 
@@ -36,12 +37,18 @@ public class FunctionNode:Node
         {
              input.DrawInput();
         }
-        _output.DrawInput();
+
+        if (_output != null)
+        {
+            _output.DrawInput();
+            Console.WriteLine("work");
+        }
     }
 
     public override void TryAttached()
     {
-        _parent.TryAttach(_output);
+        if(_output!=null)
+            _parent.TryAttach(_output);
     }
     
     

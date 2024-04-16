@@ -8,6 +8,7 @@ public class Output<T> : IForm
     protected readonly Node _parent;
     public Vector2 _point;
     private bool IsDrawing { get; set; }
+    public string Title { get; set; }
 
     private void DrawBazierOn()
     {
@@ -22,7 +23,7 @@ public class Output<T> : IForm
 
     public void DrawInput()
     {
-        ImGui.Text("    ");
+        ImGui.Text(Title);
         ImGui.Text("            ");
         ImGui.SameLine();
         float mg = ImGui.GetCursorPos().Y;
@@ -80,5 +81,10 @@ public class Output<T> : IForm
     public Guid GetParentId()
     {
         return _parent.ID;
+    }
+
+    public void SetTitle(string title)
+    {
+        Title = title;
     }
 }

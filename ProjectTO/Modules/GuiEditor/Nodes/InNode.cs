@@ -7,23 +7,26 @@ namespace ProjectTo.Modules.GuiEditor;
 
 public class InNode:Node
 {
-    IForm _output;
+    public IForm _output;
     private bool _editTitle = false;
     private string _bufferTitle = string.Empty;
+    public string Titlel { get; set; }
+
+    public void SetTitle(string title)
+    {
+        Title = title;
+    }
     public InNode(Guid id, Vector2 winMenu, Shader menu) : base(id, winMenu, menu)
     {
-        this.HeaderColor = new Vector4(0.7f,0.0f,0.0f,1.0f);
-        _output = new Output<float>(this);
-
+        this.HeaderColor = new Vector4(0.7f, 0.0f, 0.0f, 1.0f);
+        //_output = new Output<float>(this);
         ID = id;
-
     }
 
     public InNode(Guid id, Shader menu) : base(id, menu)
     {
         this.HeaderColor = new Vector4(0.7f, 0.0f, 0.0f, 1.0f);
         ID = id;
-     
     }
     protected override void DrawNodeContent()
     {
@@ -32,11 +35,9 @@ public class InNode:Node
 
     protected override void DrawHeaderContent()
     {
-   
         if (_editTitle)
         {
             ImGui.InputText("##MyInputText", ref _bufferTitle, 1024);
-            
         }
         else
         {
@@ -50,7 +51,7 @@ public class InNode:Node
         }
     }
 
-    public override List<IForm> Inputs => null;
+    public override List<IForm> Inputs => new List<IForm>();
     public override void TryAttached()
     {
         _parent.TryAttach(_output);

@@ -37,7 +37,7 @@ public class DataBaseInterface
     private List<InputDto> LoadInputs(int id)
     {
         var command = _connection.CreateCommand();
-        command.CommandText =  $"Select * from Input where id = {id}";
+        command.CommandText =  $"Select * from Input where Nodeid = {id}";
         var readr = command.ExecuteReader();
         var list = new List<InputDto>();
         while (readr.Read())
@@ -117,7 +117,8 @@ public class DataBaseInterface
             (
                 readr.GetInt32(0),
                 readr.GetString(1),
-                readr.GetString(2)
+                readr.GetString(2),
+                readr.GetString(3)
             );
             Dictionary.Add(type.Id,type);
         }
