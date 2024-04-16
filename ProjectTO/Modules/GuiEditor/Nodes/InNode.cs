@@ -20,13 +20,13 @@ public class InNode:Node
     {
         this.HeaderColor = new Vector4(0.7f, 0.0f, 0.0f, 1.0f);
         //_output = new Output<float>(this);
-        ID = id;
+        Id = id;
     }
 
     public InNode(Guid id, Shader menu) : base(id, menu)
     {
         this.HeaderColor = new Vector4(0.7f, 0.0f, 0.0f, 1.0f);
-        ID = id;
+        Id = id;
     }
     protected override void DrawNodeContent()
     {

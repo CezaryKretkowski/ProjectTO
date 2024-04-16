@@ -10,7 +10,7 @@ namespace ProjectTo.Modules.GraphicApi;
 
 public class NodeFactory
 {
-    private static NodeFactory _instance;
+    private static NodeFactory? _instance;
     public static NodeFactory Instance { get => _instance ??= new NodeFactory(); }
     private NodeFactory() { }
 
@@ -48,12 +48,16 @@ public class NodeFactory
     private InNode CreateInNode(NodeDto node, Vector2 pos, Shader parent)
     {
         var id = Guid.NewGuid();
-        var innode =new InNode(id, pos,parent);
-        innode.SetTitle(node.Name);
-        var output =node.Outputs.Select(x => x).FirstOrDefault();
-        innode._output = AddOutput(innode, output);
-        innode._output.SetTitle(output.DataTypeDto.GlslType);
-        return innode;
+        var inode =new InNode(id, pos,parent);
+        inode.SetTitle(node.Name);
+        var output = node.Outputs.Select(x => x).FirstOrDefault();
+        if (output != null)
+        {
+            inode._output = AddOutput(inode, output);
+            inode._output.SetTitle(output.DataTypeDto.GlslType);
+        }
+
+        return inode;
     }
     
     private OutNode CreateOutNode(NodeDto node, Vector2 pos, Shader parent)
@@ -69,16 +73,13 @@ public class NodeFactory
 
     private void AddInput(Node node, InputDto dto)
     {
-        var name = dto.DataTypeDto.InterfaceImplementation;
-        var nameIn = dto.Name;
-        var ctype = dto.DataTypeDto.CType;
-        switch (ctype)
+        switch (dto.DataTypeDto.CType)
         {
-            case "float": node.Inputs.Add(Input<float>.CreateInputInstance(name, node,nameIn)); break;
-            case "Vector3": node.Inputs.Add(Input<Vector3>.CreateInputInstance(name, node,nameIn)); break;
-            case "Vector2": node.Inputs.Add(Input<Vector2>.CreateInputInstance(name, node,nameIn)); break;
-            case "Vector4": node.Inputs.Add(Input<Vector4>.CreateInputInstance(name, node,nameIn)); break;
-            default: node.Inputs.Add(Input<String>.CreateInputInstance(name,node,nameIn)) ;break;
+            case "float": node.Inputs.Add(Input<float>.CreateInputInstance(node,dto)); break;
+            case "Vector3": node.Inputs.Add(Input<Vector3>.CreateInputInstance(node,dto)); break;
+            case "Vector2": node.Inputs.Add(Input<Vector2>.CreateInputInstance(node,dto)); break;
+            case "Vector4": node.Inputs.Add(Input<Vector4>.CreateInputInstance(node,dto)); break;
+            default: node.Inputs.Add(Input<String>.CreateInputInstance(node,dto)) ;break;
         }
     }
 
@@ -86,11 +87,11 @@ public class NodeFactory
     {
         switch (output.DataTypeDto.CType)
         {
-            case "float": return new Output<float>(node);
-            case "Vector4": return new Output<Vector4>(node);
-            case "Vector3": return new Output<Vector3>(node);
-            case "Vector2": return new Output<Vector2>(node);
-            default: return new Output<string>(node);
+            case "float": return new Output<float>(node,output);
+            case "Vector4": return new Output<Vector4>(node,output);
+            case "Vector3": return new Output<Vector3>(node,output);
+            case "Vector2": return new Output<Vector2>(node,output);
+            default: return new Output<string>(node,output);
         }
     }
 }

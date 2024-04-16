@@ -31,16 +31,16 @@ public partial class Node
     {
         if (_displaySuMenu)
         {
-            if (ImGui.BeginPopupContextItem("item" + ID))
+            if (ImGui.BeginPopupContextItem("item" + Id))
             {
                 DrawSubMenuContent();
                 if (ImGui.MenuItem("Remove"))
-                    Parent.Remove(ID);
+                    Parent.Remove(Id);
                 ImGui.EndPopup();
             }
         }
         
-        if (!ImGui.IsPopupOpen("item" + ID) && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+        if (!ImGui.IsPopupOpen("item" + Id) && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
         {
             _displaySuMenu = false;
         }
@@ -52,7 +52,7 @@ public partial class Node
         ImGui.PushStyleColor(ImGuiCol.ChildBg, BackGroundColor);
         ImGui.PushStyleColor(ImGuiCol.Border, BorderColor);
         ImGui.PushStyleVar(ImGuiStyleVar.ChildRounding, 6.0f);
-        ImGui.BeginChild(ID.ToString(), Size, ImGuiChildFlags.Border);
+        ImGui.BeginChild(Id.ToString(), Size, ImGuiChildFlags.Border);
         ImGui.PushStyleColor(ImGuiCol.Button, HeaderColor);
         ImGui.PushStyleColor(ImGuiCol.ButtonHovered, HeaderColor * 1.5f);
         ImGui.PushStyleColor(ImGuiCol.ButtonActive, HeaderColor * 0.7f);
@@ -65,7 +65,7 @@ public partial class Node
         ImGui.SameLine();
         DrawHeaderContent();
         ImGui.Text("");
-        ImGui.BeginChild("ChildFrame" + ID);
+        ImGui.BeginChild("ChildFrame" + Id);
     }
     private void EndNodeContent()
     {

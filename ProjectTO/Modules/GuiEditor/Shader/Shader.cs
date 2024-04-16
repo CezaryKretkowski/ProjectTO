@@ -19,12 +19,12 @@ namespace ProjectTO.Modules.GuiEditor.Shader
         public void AndNode(NodeDto nodeDto ,Vector2 pos)
         {
             var node = NodeFactory.Instance.CreateNode(nodeDto, pos, this);
-            _nodes.Add(node.ID, node);
+            _nodes.Add(node.Id, node);
         }
       
         public void TryAttach(IForm output)
         {
-            foreach (var input in _nodes.Values.Where(node => !node.ID.Equals(output.GetParentId())).SelectMany(node => node.Inputs))
+            foreach (var input in _nodes.Values.Where(node => !node.Id.Equals(output.GetParentId())).SelectMany(node => node.Inputs))
             {
                 input.AttachOutput(output);
             }

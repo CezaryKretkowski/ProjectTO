@@ -12,7 +12,7 @@ public partial class Node
     protected readonly Shader Parent;
     
     private bool _displaySuMenu = false;
-    public Guid ID { get; init; }
+    public Guid Id { get; init; }
     protected string Title { get; set; } = "New Node";
     public Vector2 Size { get; set; } = new Vector2(200, 150);
     private Vector2 _prevWinPos;
@@ -25,7 +25,7 @@ public partial class Node
         var winPos = ImGui.GetWindowPos();
         _prevWinPos = winMenu;
         _winPos = winMenu;
-        ID = id;
+        Id = id;
         _circleDrawList = new List<DrawCircleStruct>();
         _bezierDrawList = new List<DrawBezierStruct>();
         Parent = menu;
@@ -36,7 +36,7 @@ public partial class Node
         var winPos = ImGui.GetWindowPos();
         _winPos = new Vector2(50, 50);
         _prevWinPos = new Vector2(50, 50);
-        ID = id;
+        Id = id;
         _circleDrawList = new List<DrawCircleStruct>();
         _bezierDrawList = new List<DrawBezierStruct>();
         Parent = menu;
@@ -58,7 +58,7 @@ public partial class Node
         var mousePos = new Vector2(0, 0);
         BeginNode();
         
-            ImGui.ArrowButton("##DragIdle" + ID, ImGuiDir.Down);
+            ImGui.ArrowButton("##DragIdle" + Id, ImGuiDir.Down);
             if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
             {
                 isDragging = true;
