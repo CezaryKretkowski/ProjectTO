@@ -5,6 +5,7 @@ using ProjectTO.Modules.GuiEditor.Shader;
 using System.Numerics;
 using ProjectTo.Modules.GuiEditor.InputOutput;
 using ProjectTo.Modules.InputManager;
+using ProjectTo.Modules.InputManager.Implementation;
 
 namespace ProjectTo.Modules.GraphicApi;
 
@@ -23,21 +24,24 @@ public class NodeFactory
         }
         throw new Exception("Field to create Node");
     }
-    public FunctionNode CreateFunctionNode(NodeDto node,Vector2 pos,Shader parent) {
+
+    private FunctionNode CreateFunctionNode(NodeDto node,Vector2 pos,Shader parent) {
         var id = Guid.NewGuid();
         
         var functionNode = new FunctionNode(id,pos, parent);
-        var y = (node.Inputs.Count + node.Outputs.Count) * 50;
+        functionNode.Entity = node;
+        var y = 50+(node.Inputs.Count * 50);
+
         
-        float x = 200f;
+        float x = 150;
         foreach(var i in node.Inputs )
         {
-            if (i.DataTypeDto.CType.Contains("Vector"))
-                x = 300;
+
             AddInput(functionNode,i);
         }
         functionNode.Size = new Vector2(x, y);
         var output =node.Outputs.Select(x => x).FirstOrDefault();
+        
         if (output != null)
             functionNode._output =AddOutput(functionNode,output);
         functionNode.SetTitle(node.Name);
@@ -49,13 +53,16 @@ public class NodeFactory
     {
         var id = Guid.NewGuid();
         var inode =new InNode(id, pos,parent);
+        inode.Entity = node;
         inode.SetTitle(node.Name);
         var output = node.Outputs.Select(x => x).FirstOrDefault();
-        if (output != null)
-        {
-            inode._output = AddOutput(inode, output);
-            inode._output.SetTitle(output.DataTypeDto.GlslType);
-        }
+
+        inode.Size = new Vector2(150, 100);
+        if (output == null) 
+            return inode;
+        
+        inode.Output = AddOutput(inode, output);
+        inode.Output.SetTitle(output.DataTypeDto.GlslType);
 
         return inode;
     }
@@ -63,12 +70,34 @@ public class NodeFactory
     private OutNode CreateOutNode(NodeDto node, Vector2 pos, Shader parent)
     {
         var id = Guid.NewGuid();
-        return new OutNode(id, pos,parent);
+        var outNode = new OutNode(id, pos,parent);
+        outNode.Entity = node;
+        outNode.SetTitle(node.Name);
+        var input = node.Inputs.Select(x => x).FirstOrDefault();
+        outNode.Size=new Vector2(150, 100);
+        
+        
+        if (input == null) return outNode;
+        AddInput(outNode,input);
+        return outNode;
     }
     private UniformNode CreateUniformNode(NodeDto node, Vector2 pos, Shader parent)
     {
         var id = Guid.NewGuid();
-        return new UniformNode(id, pos,parent);
+        var uniformNode =  new UniformNode(id, pos,parent);
+        uniformNode.Entity = node;
+        uniformNode.SetTitle(node.Name);
+        var output = node.Outputs.Select(x => x).FirstOrDefault();
+
+        uniformNode.Size = new Vector2(150, 100);
+        if (output == null) 
+            return  uniformNode;
+        
+        uniformNode.Output = AddOutput( uniformNode, output);
+        uniformNode.Output.SetTitle(output.DataTypeDto.GlslType);
+        uniformNode._output = uniformNode.Output;
+
+        return uniformNode;
     }
 
     private void AddInput(Node node, InputDto dto)
@@ -79,7 +108,9 @@ public class NodeFactory
             case "Vector3": node.Inputs.Add(Input<Vector3>.CreateInputInstance(node,dto)); break;
             case "Vector2": node.Inputs.Add(Input<Vector2>.CreateInputInstance(node,dto)); break;
             case "Vector4": node.Inputs.Add(Input<Vector4>.CreateInputInstance(node,dto)); break;
-            default: node.Inputs.Add(Input<String>.CreateInputInstance(node,dto)) ;break;
+            case "int": node.Inputs.Add(Input<int>.CreateInputInstance(node,dto)); break;
+            default:
+                node.Inputs.Add(Input<String>.CreateInputInstance(node,dto)) ;break;
         }
     }
 
@@ -87,11 +118,12 @@ public class NodeFactory
     {
         switch (output.DataTypeDto.CType)
         {
-            case "float": return new Output<float>(node,output);
-            case "Vector4": return new Output<Vector4>(node,output);
-            case "Vector3": return new Output<Vector3>(node,output);
-            case "Vector2": return new Output<Vector2>(node,output);
-            default: return new Output<string>(node,output);
+            case "float": return new Output<float>(node,output,new FloatInputHandler());
+            case "Vector4": return new Output<Vector4>(node,output,new Vec4InputHandler());
+            case "Vector3": return new Output<Vector3>(node,output,new Vec3InputHandler());
+            case "Vector2": return new Output<Vector2>(node,output,new Vec2InputHandler());
+            case "int": return new Output<int>(node,output,new IntInputHandler());
+            default: return new Output<string>(node,output,new StringInputHandler());
         }
     }
 }

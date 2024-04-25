@@ -14,7 +14,15 @@ namespace ProjectTO.Modules.GuiEditor.Shader
 {
     public abstract class Shader
     {
+        
+        protected Compiler _compiler = new Compiler();
+        
         protected readonly Dictionary<Guid, Node> _nodes = new Dictionary<Guid, Node>();
+
+        public List<Node> GetListNode()
+        {
+            return _nodes.Values.ToList();
+        }
 
         public void AndNode(NodeDto nodeDto ,Vector2 pos)
         {
@@ -39,6 +47,11 @@ namespace ProjectTO.Modules.GuiEditor.Shader
             foreach (var node in _nodes.Values) { 
                 node.DrawNode();
             }
+        }
+
+        public virtual string GetSource()
+        {
+            return "";
         }
     }
 }

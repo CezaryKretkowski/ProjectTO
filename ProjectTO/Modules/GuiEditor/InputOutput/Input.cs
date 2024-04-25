@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using ImGuiNET;
 using ProjectTo.Modules.GraphicApi.DataModels;
 using ProjectTo.Modules.InputManager;
+using ProjectTo.Modules.Scene;
 
 namespace ProjectTo.Modules.GuiEditor.InputOutput;
 
@@ -10,17 +11,16 @@ public class Input<T> :IForm
 {
     private InputDto? _dto;
     private T? Value { get; set; }
-    private IInputHandler<T> InputHandler { get; set; }
 
     private Vector2 _point;
     private string Name { get; set; } = "Input"+Guid.NewGuid().ToString();
     private Output<T>? Output { get; set; }
     private readonly Node _parent;
 
-    private Input(Node parent,IInputHandler<T> inputHandler)
+    private Input(Node parent)
     {
         _parent = parent;
-        InputHandler = inputHandler;
+
         
     }
 
@@ -35,7 +35,9 @@ public class Input<T> :IForm
 
     private void DrawForm()
     {
-        Value =InputHandler.HandleInput(Name,this.Value);
+       
+        ImGui.Text(" "+_dto.DataTypeDto.GlslType);
+        ImGui.Text("");
         DrawLine();
     }
 
@@ -97,21 +99,44 @@ public class Input<T> :IForm
         Name = title;
     }
 
+    public string GetTitle()
+    {
+        return Name;
+    }
+
+    public InputDto? GetInputDto()
+    {
+        return _dto!;
+    }
+
+    public Guid GetOutputParent()
+    {
+        if (Output == null) return Guid.Empty;;
+        return Output.GetParentId();
+    }
+
+    public void DrawOutpute()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SetUnforms(ShaderHelper shaderHelper)
+    {
+        throw new NotImplementedException();
+    }
+
+
+    // public int GetOutputID()
+    // {
+    //     
+    //     return 0;
+    // }
+
     public static Input<T> CreateInputInstance(Node parent,InputDto dto)
     {
-        var inputHandlerType = Type.GetType(dto.DataTypeDto.InterfaceImplementation);
-         
-        if (inputHandlerType == null)
-            throw new ArgumentException($"Cannot find class :{dto.DataTypeDto.InterfaceImplementation}");
         
-        
-        var inputHandlerInterfaceType = typeof(IInputHandler<>).MakeGenericType(typeof(T));
-        if (!inputHandlerInterfaceType.IsAssignableFrom(inputHandlerType))
-            throw new ArgumentException($"Class {dto.DataTypeDto.InterfaceImplementation} not implements interface {inputHandlerInterfaceType.Name}");
-        
-        
-        dynamic inputHandlerInstance = Activator.CreateInstance(inputHandlerType)!;
-        var input = new Input<T>(parent, inputHandlerInstance);
+        //Do zrobienia dorzucić tu ten mechanizm 
+        var input = new Input<T>(parent);
         input.Name = dto.Name;
         input._dto = dto;
         return input;

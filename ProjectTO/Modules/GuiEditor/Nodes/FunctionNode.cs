@@ -8,7 +8,7 @@ namespace ProjectTo.Modules.GuiEditor;
 public class FunctionNode:Node
 {
     readonly List<IForm> _inputs;
-    public IForm? _output =null;
+    
 
     public void SetTitle(string title)
     {
@@ -41,7 +41,6 @@ public class FunctionNode:Node
         if (_output != null)
         {
             _output.DrawInput();
-            Console.WriteLine("work");
         }
     }
 

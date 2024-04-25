@@ -58,7 +58,7 @@ public class DataBaseInterface
     private List<OutputDto> LoadOutputs(int id)
     {
         var command = _connection.CreateCommand();
-        command.CommandText = $"Select * from Output where id = {id}";
+        command.CommandText = $"Select * from Output where Nodeid= {id}";
         var readr = command.ExecuteReader();
         var list = new List<OutputDto>();
         while (readr.Read())
@@ -98,6 +98,7 @@ public class DataBaseInterface
                 Id = readr.GetInt32(0),
                 Name = readr.GetString(1),
                 ShaderType = GetType(readr.GetInt32(2)),
+                ToStringFormat = readr.GetString(3),
                 Inputs = LoadInputs(readr.GetInt32(0)),
                 Outputs = LoadOutputs(readr.GetInt32(0))
             };

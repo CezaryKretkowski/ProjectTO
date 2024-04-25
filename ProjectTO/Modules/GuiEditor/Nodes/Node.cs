@@ -2,6 +2,7 @@ using System.Data.Entity.Core.Metadata.Edm;
 using System.Numerics;
 using ImGuiNET;
 using OpenTK.Graphics.ES20;
+using ProjectTo.Modules.GraphicApi.DataModels;
 using ProjectTo.Modules.GuiEditor.InputOutput;
 using ProjectTO.Modules.GuiEditor.Shader;
 
@@ -10,13 +11,14 @@ namespace ProjectTo.Modules.GuiEditor;
 public partial class Node
 {
     protected readonly Shader Parent;
-    
+    public NodeDto Entity { get; set; }
     private bool _displaySuMenu = false;
     public Guid Id { get; init; }
-    protected string Title { get; set; } = "New Node";
+    public string Title { get; set; } = "New Node";
     public Vector2 Size { get; set; } = new Vector2(200, 150);
     private Vector2 _prevWinPos;
     private Vector2 _winPos;
+    public  IForm? _output =null;
     public bool TryAttach { get; set; }
     
 

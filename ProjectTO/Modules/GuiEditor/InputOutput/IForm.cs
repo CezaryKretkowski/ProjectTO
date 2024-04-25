@@ -1,6 +1,8 @@
 
 
 using System.Numerics;
+using ProjectTo.Modules.GraphicApi.DataModels;
+using ProjectTo.Modules.Scene;
 
 namespace ProjectTo.Modules.GuiEditor.InputOutput;
 
@@ -13,4 +15,12 @@ public interface IForm
      Guid GetParentId();
 
      void SetTitle(string title);
+     string GetTitle();
+     InputDto? GetInputDto();
+
+     Guid GetOutputParent();
+     void DrawOutpute();
+
+     void SetUnforms(ShaderHelper shaderHelper);
+
 }

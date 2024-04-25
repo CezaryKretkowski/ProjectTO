@@ -19,6 +19,11 @@ public class NodeDto
     public Types ShaderType { get; set; }
     public string Name { get; set; } = string.Empty;
     public int Id { get; set; }
+    public string ToStringFormat
+    {
+        get;
+        set;
+    }
 
     public List<InputDto> Inputs { get; set; } 
     public List<OutputDto> Outputs { get; set; } 

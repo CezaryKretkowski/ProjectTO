@@ -57,6 +57,7 @@ CREATE TABLE Node(
             id int primary key ,
             Name varchar(255) not null ,
             TypeId int not null ,
+            ToStringFormat varchar(1000),
             FOREIGN KEY (TypeId) REFERENCES Type(id)
 );
 
@@ -73,10 +74,15 @@ Create Table Input(
 
 
 DROP TABLE Input;
+delete from input;
 
-insert into Node values(1,'GL_Position',1);
-INSERT into Input values(1,'GL_Pos_VEC3','','6', '1');
-INSERT into Input values(2,'GL_Pos_W_Float','1.0f',2, 1);
+insert into Node values(1,'gl_position',1,'{0};');
+INSERT into Input values(1,'GL_Pos_VEC4','',7, 1);
+
+insert into Node values(2,'ToVector4',1,'vec4({0},{1});');
+INSERT into Input values(3,'GL_Pos_VEC3','',6, 2);
+INSERT into Input values(4,'GL_Pos_W_Float','1.0f',2, 2);
+INSERT into Output values(1,'OutToVec4',7, 2);
 
 Create Table Output(
                       id int primary key ,
@@ -87,4 +93,3 @@ Create Table Output(
                       FOREIGN KEY (NodeId) REFERENCES Node(id)
 );
 
-INSERT into Output values(1,'GL_Pos_VEC3','','6', '1');

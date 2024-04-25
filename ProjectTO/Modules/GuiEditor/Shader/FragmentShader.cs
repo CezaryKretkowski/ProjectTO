@@ -6,16 +6,18 @@ using System.Threading.Tasks;
 
 namespace ProjectTO.Modules.GuiEditor.Shader
 {
-    public class VertexShader : Shader
+    public class FragmentShader:Shader
     {
-        public VertexShader()
-        { }
+        public FragmentShader()
+        {
+            
+        }
 
         public override string GetSource()
         {
             var list = _nodes.Values.ToList();
             _compiler.Init(_nodes);
-            return _compiler.CompileWrite(ShaderProfile.Vertex);
+            return _compiler.CompileWrite(ShaderProfile.Fragment);
         }
     }
 }

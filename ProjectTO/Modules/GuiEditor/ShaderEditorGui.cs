@@ -13,6 +13,8 @@ public class ShaderEditorGui : IGui
     private Vector2 _nodePose = new Vector2(0,0);
     private readonly Dictionary<Guid, Node> _nodes = new Dictionary<Guid, Node>();
     public static ShaderEditorGui _instance;
+    private bool _showCompileResult = false;
+    public CompileResult CompileResult;
     public static ShaderEditorGui Instance
     {
         get { return _instance ??= new ShaderEditorGui(); }
@@ -21,12 +23,12 @@ public class ShaderEditorGui : IGui
     private int _displayIndex = 0;
     private int _menuShowIndeks = 0;
     public readonly VertexShader vertexShader;
-    public readonly FramgentShader fragmentShader;
+    public readonly FragmentShader fragmentShader;
 
     private ShaderEditorGui()
     {
         vertexShader = new VertexShader();  
-        fragmentShader = new FramgentShader();
+        fragmentShader = new FragmentShader();
         NodeDto node = new NodeDto() { 
         Name = "type",
         ShaderType = Types.In
@@ -36,8 +38,7 @@ public class ShaderEditorGui : IGui
             Name = "type1",
             ShaderType = Types.Function
         };
-       // vertexShader.AndNode(node,new Vector2(50,50));
-       // vertexShader.AndNode(node1,new Vector2(50,50));
+        CompileResult = new CompileResult(false, "Not compiled", "", "");
         Items = new[] { "Vertex Shader", "Fragment Shader" };
     }
 
@@ -61,9 +62,8 @@ public class ShaderEditorGui : IGui
         
     }
 
-    
 
-    public void OnWindowContexMenu()
+    private void OnWindowContextMenu()
     {
         if (ImGui.BeginPopupContextWindow())
         {
@@ -96,18 +96,16 @@ public class ShaderEditorGui : IGui
                         var nodeDto = new NodeDto()
                         {
                             ShaderType = Types.In,
-                            Name = "New In",
+                            Name = "New_In "+data.GlslType,
                             Outputs = new List<OutputDto>()
                              {
-                                 new OutputDto(1,"Vec4",data)
+                                 new OutputDto(1,data.GlslType,data)
                              }
-                            
                         };
                         if (_displayIndex == 0)
                         {
                             vertexShader.AndNode(nodeDto,new Vector2(50,50));
                         }
-
                         else
                         {
                             fragmentShader.AndNode(nodeDto,new Vector2(50,50));
@@ -118,25 +116,57 @@ public class ShaderEditorGui : IGui
                 ImGui.EndMenu();
             }
         
-            if (ImGui.BeginMenu("New uniform node"))
-            {
-                foreach (var data in DataBaseInterface.Instance.Dictionary.Values)
-                {
-                    if (ImGui.MenuItem(data.GlslType))
-                    {
-                        
-                    }
-                }
-                ImGui.EndMenu();
-            }
-          
             if (ImGui.BeginMenu("New out node"))
             {
                 foreach (var data in DataBaseInterface.Instance.Dictionary.Values)
                 {
                     if (ImGui.MenuItem(data.GlslType))
                     {
-                        
+                        var nodeDto = new NodeDto()
+                        {
+                            ShaderType = Types.Out,
+                            Name = "New_out",
+                            Inputs = new List<InputDto>()
+                            {
+                                new InputDto(1,data.GlslType,"",data)
+                            }
+                        };
+                        if (_displayIndex == 0)
+                        {
+                            vertexShader.AndNode(nodeDto,new Vector2(50,50));
+                        }
+                        else
+                        {
+                            fragmentShader.AndNode(nodeDto,new Vector2(50,50));
+                        }
+                    }
+                }
+                ImGui.EndMenu();
+            }
+          
+            if (ImGui.BeginMenu("New uniform node"))
+            {
+                foreach (var data in DataBaseInterface.Instance.Dictionary.Values)
+                {
+                    if (ImGui.MenuItem(data.GlslType))
+                    {
+                        var nodeDto = new NodeDto()
+                        {
+                            ShaderType = Types.Uniform,
+                            Name = "New_uniform " + data.GlslType,
+                            Outputs = new List<OutputDto>()
+                            {
+                                new OutputDto(1,data.GlslType,data)
+                            }
+                        };
+                        if (_displayIndex == 0)
+                        {
+                            vertexShader.AndNode(nodeDto,new Vector2(50,50));
+                        }
+                        else
+                        {
+                            fragmentShader.AndNode(nodeDto,new Vector2(50,50));
+                        }
                     }
                 }
                 ImGui.EndMenu();
@@ -146,24 +176,55 @@ public class ShaderEditorGui : IGui
         }
 
     }
-    
+
+    public void DrawCompileResult()
+    {
+        if (ImGui.BeginPopupModal("Compile result",ref _showCompileResult))
+        {
+            ImGui.Text(CompileResult.Message);
+            if (ImGui.Button("close"))
+            {
+                ImGui.CloseCurrentPopup();
+                _showCompileResult = false;
+            }
+            ImGui.EndPopup();
+        }
+    }
+
     public void OnRender()
     {
         
         
         ImGui.Begin("Inspector");
 
-        for(var i = 0; i<Items.Length;i++)
-        {
+            for(var i = 0; i<Items.Length;i++)
+            {
                 ImGui.Selectable(Items[i],(i==_displayIndex));
                 if (ImGui.IsItemClicked())
                 {
                     _displayIndex = i;
                 }
-        }
-        
+            }
 
-        ImGui.End();
+            ImGui.BeginChild("Compiler");
+                ImGui.Text("");
+                ImGui.Text("Compiler");
+ 
+                if (ImGui.Button("Compile shader"))
+                {
+                        var vertSource =vertexShader.GetSource();
+                        var fragSource=fragmentShader.GetSource();
+                        CompileResult = Compiler.TryCreatProgram(vertSource,fragSource);
+                        _showCompileResult = true;
+                        ImGui.OpenPopup("Compile result");
+                }
+                DrawCompileResult();
+          
+
+            ImGui.EndChild();
+        ImGui.End();  
+      
+ 
         ImGui.Begin("Node");
         
             ImGui.PushStyleColor(ImGuiCol.ChildBg,new Vector4(0.24f, 0.24f, 0.27f, 0.68f));
@@ -174,7 +235,8 @@ public class ShaderEditorGui : IGui
                 else
                     fragmentShader.DrawNodes();                
                 
-                OnWindowContexMenu();
+                OnWindowContextMenu();
+             
      
             ImGui.EndChild();
             ImGui.PopStyleColor();

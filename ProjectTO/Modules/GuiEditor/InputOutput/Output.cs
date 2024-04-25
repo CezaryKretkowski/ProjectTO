@@ -1,14 +1,19 @@
 using System.Numerics;
 using ImGuiNET;
 using ProjectTo.Modules.GraphicApi.DataModels;
+using ProjectTO.Modules.GuiEditor.Shader;
+using ProjectTo.Modules.InputManager;
+using ProjectTo.Modules.Scene;
 
 namespace ProjectTo.Modules.GuiEditor.InputOutput;
 
-public class Output<T>(Node parent,OutputDto dto) : IForm
+public class Output<T>(Node parent,OutputDto dto,IInputHandler<T> InputHander) : IForm
 {
     public Vector2 Point;
+    public T Value;
     private bool IsDrawing { get; set; }
     private string Name { get; set; } = "Output";
+    
 
     private void DrawBezierOn()
     {
@@ -18,7 +23,7 @@ public class Output<T>(Node parent,OutputDto dto) : IForm
 
     public void DrawInput()
     {
-        ImGui.Text(Name);
+        //ImGui.Text(Name);
         ImGui.Text("            ");
         ImGui.SameLine();
         var mg = ImGui.GetCursorPos().Y;
@@ -78,4 +83,36 @@ public class Output<T>(Node parent,OutputDto dto) : IForm
     {
         Name = title;
     }
+
+    public string GetTitle()
+    {
+        return Name;
+    }
+
+    public InputDto? GetInputDto()
+    {
+        return null;
+    }
+
+    public Guid GetOutputParent()
+    {
+        return Guid.Empty;
+    }
+
+    public void DrawOutpute()
+    {
+        var name = parent.Title;
+        Value = InputHander.HandleInput(name+"##value"+dto.Id,Value);
+    }
+
+    public void SetUnforms(ShaderHelper shaderHelper)
+    {
+        InputHander.SetUniform(shaderHelper,Compiler.RemoveSpace(parent.Title));
+    }
+
+
+    // public int GetOutputID()
+    // {
+    //     return dto.Id;
+    // }
 }
