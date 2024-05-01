@@ -3,23 +3,15 @@ using ProjectTo.Modules.Scene;
 
 namespace ProjectTo.Modules.InputManager.Implementation;
 
-public class FloatInputHandler : IInputHandler<float>
+public class FloatInputHandler : IInputHandler
 {
-    private float args;
-    public float HandleInput(string name,float argument)
+    private float _args;
+    public void HandleInput(string name)
     {
-        ImGui.InputFloat(name, ref argument);
-        args = argument;
-        return argument;
+        ImGui.InputFloat(name, ref _args);
     }
-
-    public void SetArgument(float argument)
-    {
-        args = argument;
-    }
-
     public void SetUniform(ShaderHelper shaderHelper,string name)
     {
-        shaderHelper.SetFloat(name,args);
+        shaderHelper.SetFloat(name,_args);
     }
 }

@@ -11,6 +11,9 @@ public partial class Node
     private Vector4 BackGroundColor { get; set; } = new Vector4(0.24f, 0.24f, 0.27f, 1f);
     private readonly List<DrawCircleStruct> _circleDrawList;
     private readonly List<DrawBezierStruct> _bezierDrawList;
+    public Vector2 Size { get; set; } = new Vector2(200, 150);
+    private Vector2 _prevWinPos;
+    private Vector2 _winPos;
 
 
     #region Designe methods

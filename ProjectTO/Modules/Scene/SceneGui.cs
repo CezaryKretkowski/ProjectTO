@@ -10,7 +10,7 @@ namespace ProjectTo.Modules.Scene;
 public class SceneGui(FrameBuffer frameBuffer) : IGui
 {
     private readonly FrameBuffer _frameBuffer = frameBuffer;
-    private SceneInspector _sceneInspector = new SceneInspector();
+    private readonly SceneInspector _sceneInspector = new SceneInspector();
     private bool init = false;
     private bool daraw = false;
 

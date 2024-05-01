@@ -4,20 +4,13 @@ using ProjectTo.Modules.Scene;
 
 namespace ProjectTo.Modules.InputManager.Implementation;
 
-public class Vec2InputHandler : IInputHandler<Vector2>
+public class Vec2InputHandler : IInputHandler
 {
-    private Vector2 args;
-    public Vector2 HandleInput(string name, Vector2 argument)
+    private Vector2 _args;
+    public void HandleInput(string name)
     {
-        ImGui.InputFloat2(name, ref argument);
-        return argument;
+        ImGui.InputFloat2(name, ref _args);
     }
-
-    public void SetArgument(Vector2 argyumeny)
-    {
-        args = argyumeny;
-    }
-
     public void SetUniform(ShaderHelper shaderHelper,string name)
     {
         throw new NotImplementedException();

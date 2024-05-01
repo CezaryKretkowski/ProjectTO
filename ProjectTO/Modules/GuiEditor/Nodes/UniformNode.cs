@@ -7,7 +7,6 @@ namespace ProjectTo.Modules.GuiEditor;
 
 public class UniformNode : Node
 {
-    public IForm Output;
     private bool _editTitle = false;
     private string _bufferTitle = string.Empty;
     public void SetTitle(string title)
@@ -19,16 +18,11 @@ public class UniformNode : Node
         this.HeaderColor = new Vector4(0.7f, 0.8f, 0.0f, 1.0f);
         Id = id;
     }
-
-    public UniformNode(Guid id, Shader menu) : base(id, menu)
-    {
-        this.HeaderColor = new Vector4(0.7f, 0.8f, 0.0f, 1.0f);
-        Id = id;
-    }
+    
     
     protected override void DrawNodeContent()
     {
-        Output.DrawInput();
+        Output?.DrawInput();
     }
 
     protected override void DrawHeaderContent()
@@ -52,7 +46,7 @@ public class UniformNode : Node
 
     protected override void TryAttached()
     {
-        Parent.TryAttach(Output);
+        if (Output != null) Parent.TryAttach(Output);
     }
 
     protected override void DrawSubMenuContent()

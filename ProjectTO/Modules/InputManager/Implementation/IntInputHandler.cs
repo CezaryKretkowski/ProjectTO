@@ -3,22 +3,15 @@ using ProjectTo.Modules.Scene;
 
 namespace ProjectTo.Modules.InputManager.Implementation;
 
-public class IntInputHandler : IInputHandler<Int32>
-{            //IntInputHandler
-    private int args;
-    public int HandleInput(string name, int argument)
+public class IntInputHandler : IInputHandler
+{         
+    private int _args;
+    public void HandleInput(string name)
     {
-        ImGui.InputInt(name, ref argument);
-        return argument;
+        ImGui.InputInt(name, ref _args);
     }
-
-    public void SetArgument(int argument)
-    {
-        args = argument;
-    }
-
     public void SetUniform(ShaderHelper shaderHelper,string name)
     {
-         shaderHelper.SetInt(name,args);
+         shaderHelper.SetInt(name,_args);
     }
 }

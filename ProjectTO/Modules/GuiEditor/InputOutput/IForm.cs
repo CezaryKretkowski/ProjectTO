@@ -10,17 +10,12 @@ public interface IForm
 {
      void DrawInput();
      bool AttachOutput(IForm form);
-     Type GetTType();
-     void TryDetach();
+     string GetInputType();
      Guid GetParentId();
-
      void SetTitle(string title);
-     string GetTitle();
      InputDto? GetInputDto();
-
      Guid GetOutputParent();
-     void DrawOutpute();
-
-     void SetUnforms(ShaderHelper shaderHelper);
+     void DrawOutput();
+     void SetUniforms(ShaderHelper shaderHelper);
 
 }

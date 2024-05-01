@@ -13,12 +13,11 @@ public partial class Node
     protected readonly Shader Parent;
     public NodeDto Entity { get; set; }
     private bool _displaySuMenu = false;
-    public Guid Id { get; init; }
-    public string Title { get; set; } = "New Node";
-    public Vector2 Size { get; set; } = new Vector2(200, 150);
-    private Vector2 _prevWinPos;
-    private Vector2 _winPos;
-    public  IForm? _output =null;
+    public Guid Id { get; protected init; }
+    public string Title { get; protected set; } = "New Node";
+    
+    public IForm? Output;
+
     public bool TryAttach { get; set; }
     
 

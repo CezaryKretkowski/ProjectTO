@@ -4,24 +4,17 @@ using ProjectTo.Modules.Scene;
 
 namespace ProjectTo.Modules.InputManager.Implementation;
 
-public class Vec4InputHandler :IInputHandler<Vector4>
+public class Vec4InputHandler :IInputHandler
 {
-    private OpenTK.Mathematics.Vector4 args;
-    public Vector4 HandleInput(string name, Vector4 argument)
+    private Vector4 _args;
+    public void HandleInput(string name)
     {
-        ImGui.InputFloat4(name, ref argument);
-        SetArgument(argument);
-        return argument;
+        ImGui.InputFloat4(name, ref _args);
     }
-
-    public void SetArgument(Vector4 ars)
-    {
-        args = new OpenTK.Mathematics.Vector4(ars.X, ars.Y, ars.Z, ars.W);
-        
-    }
-
+    
     public void SetUniform(ShaderHelper shaderHelper,string name)
-    {   Console.WriteLine(args);
-        shaderHelper.SetVector4(name,args);
+    {   Console.WriteLine(_args);
+        var argument = new OpenTK.Mathematics.Vector4(_args.X, _args.Y, _args.Z, _args.W);
+        shaderHelper.SetVector4(name,argument);
     }
 }

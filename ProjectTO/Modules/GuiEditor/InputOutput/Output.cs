@@ -7,14 +7,11 @@ using ProjectTo.Modules.Scene;
 
 namespace ProjectTo.Modules.GuiEditor.InputOutput;
 
-public class Output<T>(Node parent,OutputDto dto,IInputHandler<T> InputHander) : IForm
+public class Output(Node parent,OutputDto dto,IInputHandler inputHandler) : IForm
 {
     public Vector2 Point;
-    public T Value;
     private bool IsDrawing { get; set; }
     private string Name { get; set; } = "Output";
-    
-
     private void DrawBezierOn()
     {
         var point2 = ImGui.GetMousePos();
@@ -23,7 +20,6 @@ public class Output<T>(Node parent,OutputDto dto,IInputHandler<T> InputHander) :
 
     public void DrawInput()
     {
-        //ImGui.Text(Name);
         ImGui.Text("            ");
         ImGui.SameLine();
         var mg = ImGui.GetCursorPos().Y;
@@ -35,7 +31,7 @@ public class Output<T>(Node parent,OutputDto dto,IInputHandler<T> InputHander) :
         Point = point;
         
         DrawLine();
-        if (ImGui.IsMouseDown(ImGuiMouseButton.Left) && IsDrawing == true)
+        if (ImGui.IsMouseDown(ImGuiMouseButton.Left) && IsDrawing)
         {
             DrawBezierOn();
         }
@@ -67,28 +63,21 @@ public class Output<T>(Node parent,OutputDto dto,IInputHandler<T> InputHander) :
         return true;
     }
 
-    public Type GetTType()
+    public  string GetInputType()
     {
-        return typeof(T);
+        return dto.DataTypeDto.GlslType;
     }
 
-    public void TryDetach() { }
+    private void TryDetach() { }
 
     public Guid GetParentId()
     {
         return parent.Id;
     }
-
     public void SetTitle(string title)
     {
         Name = title;
     }
-
-    public string GetTitle()
-    {
-        return Name;
-    }
-
     public InputDto? GetInputDto()
     {
         return null;
@@ -99,20 +88,36 @@ public class Output<T>(Node parent,OutputDto dto,IInputHandler<T> InputHander) :
         return Guid.Empty;
     }
 
-    public void DrawOutpute()
+    public void DrawOutput()
     {
         var name = parent.Title;
-        Value = InputHander.HandleInput(name+"##value"+dto.Id,Value);
+        inputHandler.HandleInput(name+"##value"+dto.Id);
     }
 
-    public void SetUnforms(ShaderHelper shaderHelper)
+    public void SetUniforms(ShaderHelper shaderHelper)
     {
-        InputHander.SetUniform(shaderHelper,Compiler.RemoveSpace(parent.Title));
+        inputHandler.SetUniform(shaderHelper,Compiler.RemoveSpace(parent.Title));
     }
 
+    public static Output CrateOutput(Node parent,OutputDto dto)
+    {
+        try
+        {
+            var type = Type.GetType(dto.DataTypeDto.InterfaceImplementation);
+            
+            if (type == null) throw new Exception("Type is null");
+            
+            var instance = Activator.CreateInstance(type);
 
-    // public int GetOutputID()
-    // {
-    //     return dto.Id;
-    // }
+            if (instance == null) throw new Exception("Instance is null");
+            
+            return new Output(parent, dto, (IInputHandler)instance);
+
+        }
+        catch (Exception e)
+        {
+            throw new Exception("Cannot creat' instance of object!!"+e.StackTrace);
+        }
+    }
+
 }

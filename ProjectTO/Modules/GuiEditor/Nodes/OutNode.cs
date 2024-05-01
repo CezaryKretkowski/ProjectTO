@@ -14,15 +14,8 @@ public class OutNode : Node
 
     public OutNode(Guid id, Vector2 winMenu, Shader menu) : base(id, winMenu, menu)
     {
-        this.HeaderColor = new Vector4(0.0f, 0.7f,0.0f , 1.0f);
-        _inputs = new List<IForm>();
-        Id = id;
-    }
-
-    public OutNode(Guid id, Shader menu) : base(id, menu)
-    {
-        this.HeaderColor = new Vector4(0.0f, 0.7f, 0.0f, 1.0f);
-        _inputs = new List<IForm>();
+        HeaderColor = new Vector4(0.0f, 0.7f,0.0f , 1.0f);
+        _inputs = new List<IForm>{};
         Id = id;
     }
     public void SetTitle(string title)

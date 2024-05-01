@@ -7,21 +7,19 @@ using ProjectTo.Modules.Scene;
 
 namespace ProjectTo.Modules.GuiEditor.InputOutput;
 
-public class Input<T> :IForm
+public class Input :IForm
 {
-    private InputDto? _dto;
-    private T? Value { get; set; }
-
+    private readonly InputDto _dto;
+    
     private Vector2 _point;
     private string Name { get; set; } = "Input"+Guid.NewGuid().ToString();
-    private Output<T>? Output { get; set; }
+    private Output? Output { get; set; }
     private readonly Node _parent;
 
-    private Input(Node parent)
+    private Input(Node parent,InputDto dto)
     {
         _parent = parent;
-
-        
+        _dto = dto;
     }
 
     private void DrawLine()
@@ -35,7 +33,6 @@ public class Input<T> :IForm
 
     private void DrawForm()
     {
-       
         ImGui.Text(" "+_dto.DataTypeDto.GlslType);
         ImGui.Text("");
         DrawLine();
@@ -60,25 +57,20 @@ public class Input<T> :IForm
         var mousePosition = ImGui.GetMousePos();
         if (mousePosition.X > _point.X - 6.0f && mousePosition.X < _point.X + 6.0f &&
             mousePosition.Y > _point.Y - 6.0f && mousePosition.Y < _point.Y + 6.0f &&
-            this.GetTType() == form.GetTType())
+            GetInputType() == form.GetInputType())
         {
-            
-            Output = (Output<T>?)form;
+            Output = (Output)form;
             return true;
         }
-        else
-        {
-            return false;
-        }
-
+        return false;
     }
 
-    public Type GetTType()
+    public string GetInputType()
     {
-        return typeof(T);
+        return _dto.DataTypeDto.GlslType;
     }
 
-    public void TryDetach()
+    public void TryDetach() 
     {
         var mousePosition = ImGui.GetMousePos();
         if (mousePosition.X > _point.X - 6.0f && mousePosition.X < _point.X + 6.0f &&
@@ -99,46 +91,27 @@ public class Input<T> :IForm
         Name = title;
     }
 
-    public string GetTitle()
-    {
-        return Name;
-    }
-
     public InputDto? GetInputDto()
     {
-        return _dto!;
+        return _dto;
     }
-
     public Guid GetOutputParent()
     {
         if (Output == null) return Guid.Empty;;
         return Output.GetParentId();
     }
 
-    public void DrawOutpute()
+    public static Input CreateInputInstance(Node parent,InputDto dto)
     {
-        throw new NotImplementedException();
-    }
-
-    public void SetUnforms(ShaderHelper shaderHelper)
-    {
-        throw new NotImplementedException();
-    }
-
-
-    // public int GetOutputID()
-    // {
-    //     
-    //     return 0;
-    // }
-
-    public static Input<T> CreateInputInstance(Node parent,InputDto dto)
-    {
-        
-        //Do zrobienia dorzucić tu ten mechanizm 
-        var input = new Input<T>(parent);
+        var input = new Input(parent,dto);
         input.Name = dto.Name;
-        input._dto = dto;
         return input;
     }
+
+    #region NotImplemented
+
+        public void DrawOutput() { }
+        public void SetUniforms(ShaderHelper shaderHelper) { }
+
+    #endregion
 }

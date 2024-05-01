@@ -218,8 +218,8 @@ public class ShaderEditorGui : IGui
                         _showCompileResult = true;
                         ImGui.OpenPopup("Compile result");
                 }
+
                 DrawCompileResult();
-          
 
             ImGui.EndChild();
         ImGui.End();  

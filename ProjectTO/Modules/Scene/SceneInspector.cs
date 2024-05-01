@@ -51,7 +51,7 @@ public class SceneInspector
         var uniformList = _uniformNodes.Where(x => x.Entity.ShaderType == Types.Uniform);
         foreach (var uniform in uniformList)
         {
-            ((UniformNode)uniform).Output.SetUnforms(_helper);
+            ((UniformNode)uniform).Output?.SetUniforms(_helper);
         }
     }
 
@@ -60,7 +60,7 @@ public class SceneInspector
         var uniformList = _uniformNodes.Where(x => x.Entity.ShaderType == Types.Uniform);
         foreach (var uniform in uniformList)
         {
-            ((UniformNode)uniform).Output.DrawOutpute();
+            ((UniformNode)uniform).Output?.DrawOutput();
         }
     }
 

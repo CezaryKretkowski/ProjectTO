@@ -2,9 +2,8 @@ using ProjectTo.Modules.Scene;
 
 namespace ProjectTo.Modules.InputManager;
 
-public interface IInputHandler<T>
+public interface IInputHandler
 {
-    T HandleInput(string name,T? argument);
-    void SetArgument(T argument);
+    void HandleInput(string name);
     void SetUniform(ShaderHelper shaderHelper,string name);
 }

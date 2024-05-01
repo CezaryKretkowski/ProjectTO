@@ -118,7 +118,7 @@ public class Compiler
             object?[] tab = argList.ToArray();
 
              var value = string.Format(dto.ToStringFormat, tab);
-            if(node._output == null)
+            if(node.Output == null)
                 return RemoveSpace(dto.Name) + " = " + value;
             else
             {

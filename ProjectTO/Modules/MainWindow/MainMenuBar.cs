@@ -24,12 +24,18 @@ public class MainMenuBar : IGui
                 {
                     
                     var compileResult = ShaderEditorGui.Instance.CompileResult;
-                    SaveShader.SaveDialog("Frag",compileResult.FragSource);
+                    if (compileResult.Success){
+                         SaveShader.Instance.SaveFile("Fragment", compileResult.VertSource, ".glsl");
+                    }
                 }
                 if (ImGui.MenuItem("Save vertex shader"))
                 {
                     var compileResult = ShaderEditorGui.Instance.CompileResult;
-                    SaveShader.SaveDialog("Vertex",compileResult.VertSource);
+                    
+                   if (compileResult.Success)
+                   {
+                        SaveShader.Instance.SaveFile("Vertex", compileResult.VertSource, ".glsl");
+                   }
                 }
 
                 ImGui.EndMenu();
@@ -39,5 +45,6 @@ public class MainMenuBar : IGui
         }
         
         ImGui.EndMainMenuBar();
+        SaveShader.Instance.ImGuiDialog();
     }
 }
