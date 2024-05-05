@@ -1,6 +1,8 @@
+using OpenTK.Windowing.Common;
+
 namespace ProjectTo.Gui.Interfaces;
 
 public interface IGui
 {
-    void OnRender();
+    void OnRender(FrameEventArgs e);
 }

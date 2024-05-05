@@ -17,4 +17,9 @@ public class Vec3InputHandler: IInputHandler
         var ars = new OpenTK.Mathematics.Vector3(_args.X,_args.Y,_args.Z);
         shaderHelper.SetVector3(name,ars);
     }
+
+    public int GetLocationSize()
+    {
+        return 3;
+    }
 }

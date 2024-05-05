@@ -31,7 +31,7 @@ insert into DataTypes values(7,'vec4','Vector4','ProjectTo.Modules.InputManager.
 -- insert into DataTypes values(13,'bvec4','Vector2');
 -- insert into DataTypes values(14,'mat2','none');
 -- insert into DataTypes values(15,'mat3','none');
--- insert into DataTypes values(16,'mat4','none');
+insert into DataTypes values(16,'mat4','none','ProjectTo.Modules.InputManager.Implementation.Mat4Handler');
 -- insert into DataTypes values(17,'mat2x3','none');
 -- insert into DataTypes values(18,'mat2x4','none');
 -- insert into DataTypes values(19,'mat3x2','none');
@@ -83,6 +83,18 @@ insert into Node values(2,'ToVector4',1,'vec4({0},{1});');
 INSERT into Input values(3,'GL_Pos_VEC3','',6, 2);
 INSERT into Input values(4,'GL_Pos_W_Float','1.0f',2, 2);
 INSERT into Output values(1,'OutToVec4',7, 2);
+
+insert into Node values(3,'Multi3Mat4',1,'{0}*{1}*{2};');
+INSERT into Input values(5,'MulMat4_0','',16, 3);
+INSERT into Input values(6,'MulMat4_1','',16, 3);
+INSERT into Input values(7,'MulMat4_2','',16, 3);
+INSERT into Output values(2,'OutToMul3Mat4',16, 3);
+
+insert into Node values(4,'MultiVec4Mat4',1,'{0}*{1};');
+INSERT into Input values(8,'MulVec4_0','',7, 4);
+INSERT into Input values(9,'MulMat4_1','',16, 4);
+INSERT into Output values(3,'OutToMulVec4Mat4',7, 4);
+
 
 Create Table Output(
                       id int primary key ,

@@ -15,4 +15,9 @@ public class Vec2InputHandler : IInputHandler
     {
         throw new NotImplementedException();
     }
+
+    public int GetLocationSize()
+    {
+        return 2;
+    }
 }

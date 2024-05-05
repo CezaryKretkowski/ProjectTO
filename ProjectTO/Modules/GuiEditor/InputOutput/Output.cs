@@ -99,6 +99,11 @@ public class Output(Node parent,OutputDto dto,IInputHandler inputHandler) : IFor
         inputHandler.SetUniform(shaderHelper,Compiler.RemoveSpace(parent.Title));
     }
 
+    public int GetLocationSize()
+    {
+        return inputHandler.GetLocationSize();
+    }
+
     public static Output CrateOutput(Node parent,OutputDto dto)
     {
         try

@@ -10,20 +10,20 @@ public class SceneInspector
 {
     private ShaderHelper _helper;
     private List<Node> _uniformNodes;
+    private ObjectHelper _objectHelper = new ObjectHelper();
+
+    public bool SceneIsReady { get; set; }
     public bool InitScene { get; set; } = false;
     public bool DrawScene { get; set; } = false;
+    
 
-    private float[] _vertices = 
-    {
-        -0.5f, -0.5f, 0.0f, 
-        0.5f, -0.5f, 0.0f, 
-        0.0f,  0.5f, 0.0f 
-    };
     private int _vao;
     private int _vbo;
 
+    
     public void SetShaders()
     {
+        //SceneIsReady = false;
         var list1 = ShaderEditorGui.Instance.fragmentShader.GetListNode();
         var list2 = ShaderEditorGui.Instance.vertexShader.GetListNode();
         var list = list1.Concat(list2);
@@ -34,14 +34,21 @@ public class SceneInspector
     {
         Console.WriteLine("Init");
         _vao = GL.GenVertexArray();
-        GL.BindVertexArray(_vao); 
+        GL.BindVertexArray(_vao);
+        var inList = _uniformNodes.Where(x => x.Entity.ShaderType == Types.In);
+        foreach (var inNode in inList)
+        {
+            LocationHelper hellper = new LocationHelper();
+            if (inNode.Output != null)
+            {
+                var dataBuffer = ((InNode)inNode).DataBuffer;
+                if (dataBuffer != null)
+                    hellper.Init(dataBuffer, inNode.Output.GetLocationSize(), inNode.LocationId,
+                        BufferUsageHint.StaticDraw);
+            }
+        }
         
-        
-        _vbo = GL.GenBuffer();
-        GL.BindBuffer(BufferTarget.ArrayBuffer, _vbo);
-        GL.BufferData(BufferTarget.ArrayBuffer, _vertices.ToArray().Length *sizeof(float), _vertices.ToArray(), BufferUsageHint.StaticDraw);
-        GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
-        GL.EnableVertexAttribArray(0);
+
         _helper = new ShaderHelper(result.VertSource, result.FragSource);
         _helper.Use();        
     }
@@ -64,25 +71,68 @@ public class SceneInspector
         }
     }
 
+    private void DrawIns()
+    {
+        var inList = _uniformNodes.Where(x => x.Entity.ShaderType == Types.In).ToList();
+        var isRedy =true;
+        if (inList.Any())
+        {
+            foreach (var inNode in inList)
+            {
+                if (((InNode)inNode).DataBuffer == null)
+                {
+                    isRedy = false;
+                }
+            }
+
+            if (isRedy)
+                SceneIsReady = true;
+        }
+
+        foreach (var inNode in inList)
+        {
+            ImGui.Text(inNode.Title);
+            ImGui.SameLine();
+            if (ImGui.Button("Set data"))
+            {
+                _objectHelper.OpenMenu(((InNode)inNode));
+            }
+        }
+        _objectHelper.DrawMenu();
+    }
+
     public void Draw()
     {
-        Console.WriteLine("draw Scene");
         _helper.Use();
         SetUniforms();
         GL.BindVertexArray(_vao); 
-        GL.DrawArrays(PrimitiveType.Triangles,0,3);
+        GL.DrawArrays(PrimitiveType.Triangles,0,_objectHelper.GetVericesLenght());
     }
 
-    public void OnRender()
+    public void OnRender(bool compileSuccess)
     {
         SetShaders();
         ImGui.Begin("Scene Inspector");
-        if (ImGui.Button("Play Scene"))
+        if (SceneIsReady&&compileSuccess)
         {
-            InitScene = true;
-            DrawScene = true;
+            if (ImGui.Button("Play Scene"))
+            {
+                InitScene = true;
+                DrawScene = true;
+            }
         }
 
+        ImGui.Separator();
+        ImGui.Text("Object Settings");
+        ImGui.Text("");
+        _objectHelper.Draw();
+        ImGui.Separator();
+        ImGui.Text("In nodes settings");
+        ImGui.Text("");
+        DrawIns();
+        ImGui.Separator();
+        ImGui.Text("Uniform nodes settings");
+        ImGui.Text("");
         DrawUniforms();
         ImGui.End();
     }

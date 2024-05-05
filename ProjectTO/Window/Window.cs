@@ -10,6 +10,7 @@ using ProjectTo.Modules.GraphicApi;
 using ProjectTo.Modules.GuiEditor;
 using ProjectTo.Modules.MainWindow;
 using ProjectTo.Modules.Scene;
+using ProjectTO.Modules.Scene;
 using ProjectTo.RenderEngine;
 
 
@@ -22,6 +23,7 @@ public class Window : GameWindow
     private readonly FrameBuffer _frameBuffer;
     private readonly List<IGui> _modules;
     private readonly DataBaseInterface _dataBaseInterface;
+
 
     private Window(int width, int height, string title) : base(GameWindowSettings.Default, new NativeWindowSettings()
     {
@@ -49,6 +51,7 @@ public class Window : GameWindow
     protected override void OnLoad()
     {
         base.OnLoad();
+        
         _modules.Add(new SceneGui(_frameBuffer));
         _modules.Add(new MainMenuBar());
         _modules.Add(ShaderEditorGui.Instance);
@@ -57,6 +60,7 @@ public class Window : GameWindow
         GL.DepthFunc(DepthFunction.Less);
         GL.Enable(EnableCap.Blend);
         GL.BlendFunc(BlendingFactor.SrcAlpha,BlendingFactor.OneMinusSrcAlpha);
+        Camera.Instance.Init(Vector3.UnitZ * 3, ClientSize.X / (float)ClientSize.Y);
     }
     
     protected override void OnRenderFrame(FrameEventArgs e)
@@ -64,11 +68,12 @@ public class Window : GameWindow
         base.OnRenderFrame(e);
          _controller.Update(this, (float)e.Time);
         GL.ClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+        
         ImGui.DockSpaceOverViewport();
         
         foreach (var module in _modules)
         {
-            module.OnRender();
+            module.OnRender(e);
         }
 
         GL.Finish();

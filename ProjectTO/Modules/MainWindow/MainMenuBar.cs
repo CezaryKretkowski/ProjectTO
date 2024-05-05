@@ -1,4 +1,5 @@
 using ImGuiNET;
+using OpenTK.Windowing.Common;
 using ProjectTo.Gui.Interfaces;
 using ProjectTo.Modules.GuiEditor;
 using ProjectTO.Modules.GuiEditor.Shader;
@@ -7,7 +8,7 @@ namespace ProjectTo.Modules.MainWindow;
 
 public class MainMenuBar : IGui
 {
-    public void OnRender()
+    public void OnRender(FrameEventArgs e)
     {
         ImGui.BeginMainMenuBar();
         if (ImGui.BeginMenu("File"))

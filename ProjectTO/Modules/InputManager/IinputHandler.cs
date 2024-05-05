@@ -6,4 +6,5 @@ public interface IInputHandler
 {
     void HandleInput(string name);
     void SetUniform(ShaderHelper shaderHelper,string name);
+    int GetLocationSize();
 }

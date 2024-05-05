@@ -9,6 +9,8 @@ public class InNode:Node
 {
     private bool _editTitle = false;
     private string _bufferTitle = string.Empty;
+    public float[]? DataBuffer { get; set; }
+
     public void SetTitle(string title)
     {
         Title = title;
@@ -35,7 +37,7 @@ public class InNode:Node
             ImGui.Text(Title);
         }
 
-        if (ImGui.IsKeyPressed(ImGuiKey.Enter))
+        if (ImGui.IsKeyPressed(ImGuiKey.Enter)&&_editTitle)
         {
             Title = _bufferTitle;
             _editTitle = false;

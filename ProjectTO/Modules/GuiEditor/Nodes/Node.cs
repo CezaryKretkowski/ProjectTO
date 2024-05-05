@@ -11,6 +11,7 @@ namespace ProjectTo.Modules.GuiEditor;
 public partial class Node
 {
     protected readonly Shader Parent;
+    public int LocationId { get; set; }
     public NodeDto Entity { get; set; }
     private bool _displaySuMenu = false;
     public Guid Id { get; protected init; }

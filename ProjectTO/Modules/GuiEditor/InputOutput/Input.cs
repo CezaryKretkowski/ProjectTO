@@ -112,6 +112,10 @@ public class Input :IForm
 
         public void DrawOutput() { }
         public void SetUniforms(ShaderHelper shaderHelper) { }
+        public int GetLocationSize()
+        {
+            return 0;
+        }
 
-    #endregion
+        #endregion
 }

@@ -13,8 +13,13 @@ public class Vec4InputHandler :IInputHandler
     }
     
     public void SetUniform(ShaderHelper shaderHelper,string name)
-    {   Console.WriteLine(_args);
+    {   
         var argument = new OpenTK.Mathematics.Vector4(_args.X, _args.Y, _args.Z, _args.W);
         shaderHelper.SetVector4(name,argument);
+    }
+
+    public int GetLocationSize()
+    {
+        return 4;
     }
 }

@@ -58,6 +58,7 @@ public class Compiler
         foreach (var inNode in _inNodes)
         {
             var output = inNode.Entity.Outputs.Select(x => x).Single();
+            inNode.LocationId = i;
             var prefix = profile == ShaderProfile.Vertex ? $"layout (location = {i}) " : "";
             var line = $"{prefix}in {output.DataTypeDto.GlslType} {RemoveSpace(inNode.Title)};";
             builder.AppendLine(line);

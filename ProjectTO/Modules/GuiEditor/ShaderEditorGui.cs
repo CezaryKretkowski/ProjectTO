@@ -1,5 +1,6 @@
 using System.Numerics;
 using ImGuiNET;
+using OpenTK.Windowing.Common;
 using ProjectTo.Gui.Interfaces;
 using ProjectTo.Modules.GraphicApi;
 using ProjectTo.Modules.GraphicApi.DataModels;
@@ -191,7 +192,7 @@ public class ShaderEditorGui : IGui
         }
     }
 
-    public void OnRender()
+    public void OnRender(FrameEventArgs e)
     {
         
         

@@ -17,5 +17,6 @@ public interface IForm
      Guid GetOutputParent();
      void DrawOutput();
      void SetUniforms(ShaderHelper shaderHelper);
+     int GetLocationSize();
 
 }

@@ -14,4 +14,9 @@ public class StringInputHandler : IInputHandler
     {
         
     }
+
+    public int GetLocationSize()
+    {
+        return 0;
+    }
 }

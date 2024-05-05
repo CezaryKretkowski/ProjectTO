@@ -14,4 +14,9 @@ public class IntInputHandler : IInputHandler
     {
          shaderHelper.SetInt(name,_args);
     }
+
+    public int GetLocationSize()
+    {
+        return 1;
+    }
 }

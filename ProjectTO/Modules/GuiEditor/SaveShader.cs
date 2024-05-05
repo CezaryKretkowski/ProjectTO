@@ -20,7 +20,7 @@ public class SaveShader
     private string _fileName ="";
     private bool _saveFileDialog = true;
     private string _fileSource;
-
+    private string outPath = "";
     private void GetFileList()
     {
         var directoryList = Directory.EnumerateDirectories(_directory);
@@ -124,6 +124,7 @@ public class SaveShader
         UpdateDirector();
         ImGui.EndChild();
     }
+    
 
     public void SaveFile(string fileName, string source, string sufix)
     {
@@ -140,6 +141,12 @@ public class SaveShader
         _sufix = sufix;
         _showSaveDialog = true;
         _saveFileDialog = false;
+
+    }
+
+    public string GetPath()
+    {
+        return outPath;
     }
 
     public void ImGuiDialog()
@@ -172,6 +179,8 @@ public class SaveShader
             {
                 if (ImGui.Button("ChoseFile"))
                 {
+                    var filePath = _directory + "\\" + _fileName;
+                    outPath = filePath;
                     _showSaveDialog = false;
                 }
             }
