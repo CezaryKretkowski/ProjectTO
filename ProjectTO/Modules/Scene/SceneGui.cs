@@ -20,12 +20,12 @@ public class SceneGui(FrameBuffer frameBuffer) : IGui
         _sceneInspector.OnRender(compilerResult.Success);
         ImGui.Begin("Scene");
         isActive = ImGui.IsWindowFocused();
-        if(isActive)
-            Camera.Instance.OnUpdateFrame(e);
+        
         ImGui.BeginChild("Render"); 
         _frameBuffer.Bind();
         GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-        
+        if(isActive)
+                    Camera.Instance.OnUpdateFrame(e);
         if (!compilerResult.Success)
         {
             _sceneInspector.InitScene = false;

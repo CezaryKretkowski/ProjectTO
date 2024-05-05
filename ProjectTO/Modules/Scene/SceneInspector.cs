@@ -115,10 +115,21 @@ public class SceneInspector
         ImGui.Begin("Scene Inspector");
         if (SceneIsReady&&compileSuccess)
         {
-            if (ImGui.Button("Play Scene"))
+            if (!DrawScene)
             {
-                InitScene = true;
-                DrawScene = true;
+                if (ImGui.Button("Play Scene"))
+                {
+                    InitScene = true;
+                    DrawScene = true;
+                }
+            }
+            else
+            {
+                if (ImGui.Button("Stop Scene"))
+                {
+                    InitScene = false;
+                    DrawScene = false;
+                }
             }
         }
 
