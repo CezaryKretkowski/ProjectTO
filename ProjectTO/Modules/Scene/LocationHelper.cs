@@ -20,7 +20,7 @@ public class LocationHelper
         _vbo = GL.GenBuffer();
         GL.BindBuffer(BufferTarget.ArrayBuffer, _vbo);
         GL.BufferData(BufferTarget.ArrayBuffer, _bufferList.ToArray().Length *sizeof(float), _bufferList.ToArray(), hint);
-        GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, size * sizeof(float), 0);
+        GL.VertexAttribPointer(locationId, size, VertexAttribPointerType.Float, false, size * sizeof(float), 0);
         GL.EnableVertexAttribArray(locationId);
     }
 

@@ -45,6 +45,7 @@ public class OutNode : Node
         if (ImGui.IsKeyPressed(ImGuiKey.Enter)&&_editTitle)
         {
             Title = _bufferTitle;
+            Entity.Name = Title;
             _editTitle = false;
         }
     }
@@ -62,6 +63,7 @@ public class OutNode : Node
             if (ImGui.MenuItem("Save"))
             {
                 Title = _bufferTitle;
+                Entity.Name = Title;
                 _editTitle = false;
             }
 

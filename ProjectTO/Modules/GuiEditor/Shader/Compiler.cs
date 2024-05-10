@@ -62,6 +62,7 @@ public class Compiler
             var prefix = profile == ShaderProfile.Vertex ? $"layout (location = {i}) " : "";
             var line = $"{prefix}in {output.DataTypeDto.GlslType} {RemoveSpace(inNode.Title)};";
             builder.AppendLine(line);
+            i++;
         }
         builder.AppendLine("");
         foreach (var uniformNode in _uniformNodes)

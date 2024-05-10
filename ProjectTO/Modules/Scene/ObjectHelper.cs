@@ -38,11 +38,11 @@ public class ObjectHelper
                 isLoaded = true;
             }
 
-            if (!string.IsNullOrEmpty(SaveShader.Instance.GetPath())&&isLoaded)
+            if (!SaveShader.Instance.IsPathReady&&isLoaded)
             {
                 path=SaveShader.Instance.GetPath();
+                Console.WriteLine("Path:"+path);
                 Mesh = MeshLoader.LoadObj(path,true);
-                
                 isLoaded = false;
             }
 
@@ -64,12 +64,13 @@ public class ObjectHelper
     public void OpenMenu(InNode node)
     {
         this.node = node;
-        ImGui.OpenPopup("Object chooser");
+        ImGui.OpenPopup("Object chooser###"+node.Id);
     }
 
     public void DrawMenu()
     {
-        if (ImGui.BeginPopupContextItem("Object chooser"))
+        
+        if (node!=null&&ImGui.BeginPopupContextItem("Object chooser###"+node.Id))
         {
             if (ImGui.BeginMenu("Static data"))
             {

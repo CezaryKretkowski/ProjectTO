@@ -39,7 +39,7 @@ insert into DataTypes values(16,'mat4','none','ProjectTo.Modules.InputManager.Im
 -- insert into DataTypes values(21,'mat4x2','none');
 -- insert into DataTypes values(22,'mat4x3','none');
 -- insert into DataTypes values(23,'sampler1D','none');
--- insert into DataTypes values(24,'sampler2D','none');
+insert into DataTypes values(24,'sampler2D','none','ProjectTo.Modules.InputManager.Implementation.TwoDSamplerInputHandler');
 -- insert into DataTypes values(25,'sampler3D','none');
 -- insert into DataTypes values(26,'samplerCube','none');
 -- insert into DataTypes values(27,'sampler2DArray','none');
@@ -75,25 +75,32 @@ Create Table Input(
 
 DROP TABLE Input;
 delete from input;
-
+-- gl position
 insert into Node values(1,'gl_position',1,'{0};');
 INSERT into Input values(1,'GL_Pos_VEC4','',7, 1);
-
+-- cast vec3 to vec4
 insert into Node values(2,'ToVector4',1,'vec4({0},{1});');
 INSERT into Input values(3,'GL_Pos_VEC3','',6, 2);
 INSERT into Input values(4,'GL_Pos_W_Float','1.0f',2, 2);
 INSERT into Output values(1,'OutToVec4',7, 2);
-
+-- multyplay three mat4
 insert into Node values(3,'Multi3Mat4',1,'{0}*{1}*{2};');
 INSERT into Input values(5,'MulMat4_0','',16, 3);
 INSERT into Input values(6,'MulMat4_1','',16, 3);
 INSERT into Input values(7,'MulMat4_2','',16, 3);
 INSERT into Output values(2,'OutToMul3Mat4',16, 3);
-
+-- multiplat vec4 by mat4
 insert into Node values(4,'MultiVec4Mat4',1,'{0}*{1};');
 INSERT into Input values(8,'MulVec4_0','',7, 4);
 INSERT into Input values(9,'MulMat4_1','',16, 4);
 INSERT into Output values(3,'OutToMulVec4Mat4',7, 4);
+
+--texture()
+insert into Node values(5,'Texture',1,'vec4({0},{1});');
+INSERT into Input values(10,'samplerTexture','',24, 5);
+INSERT into Input values(11,'Uv_map','',5, 5);
+INSERT into Output values(4,'OutToVec4',7, 5);
+
 
 
 Create Table Output(

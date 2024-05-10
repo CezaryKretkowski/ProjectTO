@@ -24,7 +24,7 @@ public class SceneInspector
     public void SetShaders()
     {
         //SceneIsReady = false;
-        var list1 = ShaderEditorGui.Instance.fragmentShader.GetListNode();
+        var list1 = ShaderEditorGui.Instance.fragmentShader.GetListNode().Where(x=>x.Entity.ShaderType != Types.In);
         var list2 = ShaderEditorGui.Instance.vertexShader.GetListNode();
         var list = list1.Concat(list2);
         _uniformNodes = list.Where(x=>x.Entity.ShaderType == Types.Uniform || x.Entity.ShaderType == Types.In).ToList();
@@ -93,7 +93,7 @@ public class SceneInspector
         {
             ImGui.Text(inNode.Title);
             ImGui.SameLine();
-            if (ImGui.Button("Set data"))
+            if (ImGui.Button("Set data##"+inNode.Id))
             {
                 _objectHelper.OpenMenu(((InNode)inNode));
             }

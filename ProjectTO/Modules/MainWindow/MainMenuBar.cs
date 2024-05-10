@@ -26,7 +26,7 @@ public class MainMenuBar : IGui
                     
                     var compileResult = ShaderEditorGui.Instance.CompileResult;
                     if (compileResult.Success){
-                         SaveShader.Instance.SaveFile("Fragment", compileResult.VertSource, ".glsl");
+                         SaveShader.Instance.SaveFile("Fragment", compileResult.FragSource, ".glsl");
                     }
                 }
                 if (ImGui.MenuItem("Save vertex shader"))

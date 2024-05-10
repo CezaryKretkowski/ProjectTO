@@ -51,17 +51,29 @@ public class MeshLoader
         var vertList = new List<float>();
         var normList = new List<float>();
         var uvList = new List<float>();
-        for (int i =0;i<outVertices.Count;i+=8)
+        int ij = 0;
+        while (ij<outVertices.Count)
         {
-            vertList.Add(outVertices[i]);
-            vertList.Add(outVertices[i+1]);
-            vertList.Add(outVertices[i+2]);
-            normList.Add(outVertices[i+3]);
-            normList.Add(outVertices[i+4]);
-            normList.Add(outVertices[i+5]);
-            uvList.Add(outVertices[i+6]);
-            uvList.Add(outVertices[i+7]);
+            vertList.Add(outVertices[ij++]);
+            vertList.Add(outVertices[ij++]);
+            vertList.Add(outVertices[ij++]);
+            normList.Add(outVertices[ij++]);
+            normList.Add(outVertices[ij++]);
+            normList.Add(outVertices[ij++]);
+            uvList.Add(outVertices[ij++]);
+            uvList.Add(outVertices[ij++]);
         }
+        // for (int i =0;i<outVertices.Count;i+=8)
+        // {
+        //     vertList.Add(outVertices[i]);
+        //     vertList.Add(outVertices[i+1]);
+        //     vertList.Add(outVertices[i+2]);
+        //     normList.Add(outVertices[i+3]);
+        //     normList.Add(outVertices[i+4]);
+        //     normList.Add(outVertices[i+5]);
+        //     uvList.Add(outVertices[i+6]);
+        //     uvList.Add(outVertices[i+7]);
+        // }
 
         outMesh.Vertices = vertList.ToArray();
         outMesh.Normals = normList.ToArray();
