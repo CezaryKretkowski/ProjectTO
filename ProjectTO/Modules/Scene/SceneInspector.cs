@@ -1,3 +1,4 @@
+using System.Numerics;
 using ImGuiNET;
 using OpenTK.Graphics.OpenGL4;
 using ProjectTo.Modules.GraphicApi.DataModels;
@@ -97,6 +98,18 @@ public class SceneInspector
             {
                 _objectHelper.OpenMenu(((InNode)inNode));
             }
+            ImGui.SameLine();
+            var bufferTitle = ((InNode)inNode).BufferTitle;
+            if (bufferTitle.Equals("Empty"))
+            {
+                ImGui.PushStyleColor(ImGuiCol.Text,new Vector4(1.0f,0.0f,0.0f,1.0f));
+            }
+            else
+            {
+                ImGui.PushStyleColor(ImGuiCol.Text,new Vector4(0.0f,1.0f,0.0f,1.0f));
+            }
+            ImGui.Text(bufferTitle);
+            ImGui.PopStyleColor();
         }
         _objectHelper.DrawMenu();
     }

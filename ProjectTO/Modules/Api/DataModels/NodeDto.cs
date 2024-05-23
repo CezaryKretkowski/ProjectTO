@@ -1,3 +1,5 @@
+using System.Numerics;
+
 namespace ProjectTo.Modules.GraphicApi.DataModels;
 
 public enum Types
@@ -19,6 +21,10 @@ public class NodeDto
     public Types ShaderType { get; set; }
     public string Name { get; set; } = string.Empty;
     public int Id { get; set; }
+    public float X { get; set; }
+    public float Y { get; set; }
+    public Guid guid { get; set; }
+
     public string ToStringFormat
     {
         get;

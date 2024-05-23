@@ -125,4 +125,9 @@ public class Output(Node parent,OutputDto dto,IInputHandler inputHandler) : IFor
         }
     }
 
+    public OutputDto GetOutDto()
+    {
+        return dto;
+    }
+    
 }

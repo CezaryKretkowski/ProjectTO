@@ -186,7 +186,7 @@ public class SaveShader
                 if (ImGui.Button("ChoseFile"))
                 {
                     var filePath = _directory + "\\" + _fileName;
-                    Console.WriteLine(filePath);
+                   // Console.WriteLine(filePath);
                     outPath = filePath;
                     _showSaveDialog = false;
                 }

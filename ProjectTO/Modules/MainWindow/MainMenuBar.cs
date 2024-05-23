@@ -1,3 +1,4 @@
+using System.Text;
 using ImGuiNET;
 using OpenTK.Windowing.Common;
 using ProjectTo.Gui.Interfaces;
@@ -8,20 +9,47 @@ namespace ProjectTo.Modules.MainWindow;
 
 public class MainMenuBar : IGui
 {
+    private bool isLoaded = false;
+    private bool isvertex = false;
     public void OnRender(FrameEventArgs e)
     {
         ImGui.BeginMainMenuBar();
         if (ImGui.BeginMenu("File"))
         {
-            if (ImGui.BeginMenu("New Node"))
+            if (ImGui.BeginMenu("Load"))
             {
+                if (ImGui.MenuItem("Load vertex"))
+                {
+                    SaveShader.Instance.GetFilePath(".json");
+                    isvertex = true;
+                    isLoaded = true;
+                }
+                if (ImGui.MenuItem("Load fragment"))
+                {
+                    SaveShader.Instance.GetFilePath(".json");
+                    isvertex = false;
+                    isLoaded = true;
+                }
                 
                 ImGui.EndMenu();
             }
-
             if (ImGui.BeginMenu("Save"))
             {
-                if (ImGui.MenuItem("Save fragment shader"))
+                if (ImGui.MenuItem("Save vertex"))
+                {
+                    SaveShader.Instance.SaveFile("Vertex Shader",ShaderEditorGui.Instance.vertexShader.Serialize(),".json");
+                }
+                if (ImGui.MenuItem("Save fragment"))
+                {
+                    SaveShader.Instance.SaveFile("Vertex Shader",ShaderEditorGui.Instance.fragmentShader.Serialize(),".json");
+                }
+
+                ImGui.EndMenu();
+            }
+
+            if (ImGui.BeginMenu("Export"))
+            {
+                if (ImGui.MenuItem("Export fragment shader"))
                 {
                     
                     var compileResult = ShaderEditorGui.Instance.CompileResult;
@@ -29,7 +57,7 @@ public class MainMenuBar : IGui
                          SaveShader.Instance.SaveFile("Fragment", compileResult.FragSource, ".glsl");
                     }
                 }
-                if (ImGui.MenuItem("Save vertex shader"))
+                if (ImGui.MenuItem("Export vertex shader"))
                 {
                     var compileResult = ShaderEditorGui.Instance.CompileResult;
                     
@@ -38,7 +66,7 @@ public class MainMenuBar : IGui
                         SaveShader.Instance.SaveFile("Vertex", compileResult.VertSource, ".glsl");
                    }
                 }
-
+                
                 ImGui.EndMenu();
             }
 
@@ -46,6 +74,16 @@ public class MainMenuBar : IGui
         }
         
         ImGui.EndMainMenuBar();
+        if (!SaveShader.Instance.IsPathReady&&isLoaded)
+        {
+            var path=SaveShader.Instance.GetPath();
+            var content = File.ReadAllText(path);
+            if(isvertex)
+                ShaderEditorGui.Instance.vertexShader.Deserialize(content);
+            else
+                ShaderEditorGui.Instance.fragmentShader.Deserialize(content);
+            isLoaded = false;
+        }
         SaveShader.Instance.ImGuiDialog();
     }
 }

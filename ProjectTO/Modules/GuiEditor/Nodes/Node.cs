@@ -54,6 +54,9 @@ public partial class Node
     public void DrawNode()
     {      
         var winPos = _prevWinPos;
+        Entity.X=winPos.X;
+        Entity.Y=winPos.Y;
+        
         var prevWinPos = ImGui.GetWindowPos();
         var parentWinSize = ImGui.GetWindowSize();
         var isDragging = false;

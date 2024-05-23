@@ -41,7 +41,7 @@ public class ObjectHelper
             if (!SaveShader.Instance.IsPathReady&&isLoaded)
             {
                 path=SaveShader.Instance.GetPath();
-                Console.WriteLine("Path:"+path);
+               // Console.WriteLine("Path:"+path);
                 Mesh = MeshLoader.LoadObj(path,true);
                 isLoaded = false;
             }
@@ -56,6 +56,15 @@ public class ObjectHelper
             ImGui.SameLine();
             if (ImGui.Button("Change file"))
             {
+                SaveShader.Instance.GetFilePath(".obj");
+                isLoaded = true;
+            }
+            if (!SaveShader.Instance.IsPathReady&&isLoaded)
+            {
+                path=SaveShader.Instance.GetPath();
+                Console.WriteLine("Path:"+path);
+                Mesh = MeshLoader.LoadObj(path,true);
+                isLoaded = false;
             }
             
         }
@@ -78,14 +87,17 @@ public class ObjectHelper
                 {
                     node.DataBuffer = StaticDataMesh.Vertices;
                     _lenght = node.DataBuffer.Length;
+                    node.BufferTitle = "Static vertex";
                 }
                 if (ImGui.MenuItem("Normals"))
                 {
                     node.DataBuffer = StaticDataMesh.Normals;
+                    node.BufferTitle = "Static normals";
                 }
                 if (ImGui.MenuItem("uvs"))
                 {
                     node.DataBuffer = StaticDataMesh.Uvs;
+                    node.BufferTitle = "Static uvs";
                 }
 
                 ImGui.EndMenu();
@@ -99,15 +111,18 @@ public class ObjectHelper
                     {
                         node.DataBuffer = Mesh.Vertices;
                         _lenght = node.DataBuffer.Length;
+                        node.BufferTitle = "Object vertex";
                         
                     }
                     if (ImGui.MenuItem("Normals"))
                     {
                         node.DataBuffer = Mesh.Normals;
+                        node.BufferTitle = "Object normals";
                     }
                     if (ImGui.MenuItem("uvs"))
                     {
                         node.DataBuffer = Mesh.Uvs;
+                        node.BufferTitle = "Object uvs";
                     }
                     ImGui.EndMenu();
                 }

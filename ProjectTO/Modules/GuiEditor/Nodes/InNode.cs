@@ -9,6 +9,7 @@ public class InNode:Node
 {
     private bool _editTitle = false;
     private string _bufferTitle = string.Empty;
+    public string BufferTitle { get; set; } = "Empty";
     public float[]? DataBuffer { get; set; }
 
     public void SetTitle(string title)

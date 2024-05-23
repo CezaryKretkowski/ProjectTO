@@ -77,7 +77,7 @@ public class MeshLoader
 
         outMesh.Vertices = vertList.ToArray();
         outMesh.Normals = normList.ToArray();
-        outMesh.Uvs = normList.ToArray();
+        outMesh.Uvs = uvList.ToArray();
         return outMesh;
     }
 

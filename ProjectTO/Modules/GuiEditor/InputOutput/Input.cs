@@ -60,11 +60,18 @@ public class Input :IForm
             GetInputType() == form.GetInputType())
         {
             Output = (Output)form;
+            _dto.outputID = ((Output)form).GetOutDto().outputId;
             return true;
         }
         return false;
     }
-
+    public void AsignOutput(IForm form)
+    {
+        if (GetInputType() == form.GetInputType())
+        {
+            Output = (Output)form;
+        }
+    }
     public string GetInputType()
     {
         return _dto.DataTypeDto.GlslType;
