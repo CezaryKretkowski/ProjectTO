@@ -63,17 +63,6 @@ public class MeshLoader
             uvList.Add(outVertices[ij++]);
             uvList.Add(outVertices[ij++]);
         }
-        // for (int i =0;i<outVertices.Count;i+=8)
-        // {
-        //     vertList.Add(outVertices[i]);
-        //     vertList.Add(outVertices[i+1]);
-        //     vertList.Add(outVertices[i+2]);
-        //     normList.Add(outVertices[i+3]);
-        //     normList.Add(outVertices[i+4]);
-        //     normList.Add(outVertices[i+5]);
-        //     uvList.Add(outVertices[i+6]);
-        //     uvList.Add(outVertices[i+7]);
-        // }
 
         outMesh.Vertices = vertList.ToArray();
         outMesh.Normals = normList.ToArray();

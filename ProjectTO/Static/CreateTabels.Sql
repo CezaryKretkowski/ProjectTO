@@ -100,6 +100,69 @@ insert into Node values(5,'Texture',1,'vec4({0},{1});');
 INSERT into Input values(10,'samplerTexture','',24, 5);
 INSERT into Input values(11,'Uv_map','',5, 5);
 INSERT into Output values(4,'OutToVec4',7, 5);
+---LIGHT-----------------------
+    
+    
+--normalize --- FRAG SHADER
+insert into Node values(6,'Normalize',1,'normalize({0});');
+INSERT into Input values(12,'Vec3_0','',6, 6);
+INSERT into Output values(5,'OutToVecNormalize',6, 6);
+
+--multipaly Mat4xVec4 -VERTEX SHADER
+insert into Node values(7,'MultiMAt4Vec3',1,'vec3({1}*{0});');
+INSERT into Input values(13,'Mat4_0','',16, 7);
+INSERT into Input values(14,'Vec4_0','',7, 7);
+INSERT into Output values(6,'OutToVecMulti',6, 7);
+
+
+--difVec3 --- FRAG SHADER
+insert into Node values(8,'DifVec3',1,'{0}-{1};');
+INSERT into Input values(15,'Vec3_0','',6, 8);
+INSERT into Input values(16,'Vec3_1','',6, 8);
+INSERT into Output values(7,'OutToVecMulti',6, 8);
+
+--multiplay vec3_scalar  --- FRAG SHADER
+insert into Node values(9,'MultiVec3Scalar',1,'{0}*{1};');
+INSERT into Input values(17,'scalar_0','',2, 9);
+INSERT into Input values(18,'Vec3_1','',6, 9);
+INSERT into Output values(8,'OutToVecMulti',6, 9);
+
+--preperNormal -- VERTEX SHADER
+insert into Node values(10,'PrepNORMAL',1,'{1} * mat3(transpose(inverse({0})));');
+INSERT into Input values(19,'Mat4_0','',16, 10);
+INSERT into Input values(20,'Vec3_0','',6, 10);
+INSERT into Output values(9,'normalsVec3',6, 10);
+
+--difuse -- frgment shader SHADER
+insert into Node values(11,'CalculateDiffuse',1,'max(dot({0},{1}),0.0)*{2};');
+INSERT into Input values(21,'norm_vec3','',6, 11);
+INSERT into Input values(22,'light_dir_vec3','',6, 11);
+INSERT into Input values(23,'light_colorVec3_0','',6, 11);
+INSERT into Output values(10,'diffuse_vec3',6, 11);
+
+
+--Spec -- frgment shader SHADER
+insert into Node values(12,'CalculateSpec',1,'pow(max(dot(normalize({0} - {1}),reflect(-{2},{3})), 0.0), 32);');
+INSERT into Input values(24,'ViewPos_vec3','',6, 12);
+INSERT into Input values(25,'FragPos_vec3','',6, 12);
+INSERT into Input values(26,'light_DIR_VEC#','',6, 12);
+INSERT into Input values(27,'normVec3_0','',6, 12);
+INSERT into Output values(11,'diffuse_vec3',2, 12);
+
+--caluculatte Spectular
+insert into Node values(13,'Spectular Calculate',1,'0.5*{0}*{1};');
+INSERT into Input values(28,'float','',2, 13);
+INSERT into Input values(29,'light_colorVec3_0','',6, 13);
+INSERT into Output values(12,'spectular',6, 13);
+
+
+--Spec -- frgment shader SHADER
+insert into Node values(14,'CalculateSpec',1,'vec4(({0}+{1}+{2}),1.0)*{3};');
+INSERT into Input values(30,'ambient','',6, 14);
+INSERT into Input values(31,'difuse','',6, 14);
+INSERT into Input values(32,'spectullar','',6, 14);
+INSERT into Input values(33,'inColorVec4_0','',7, 14);
+INSERT into Output values(13,'result_vec4',7, 14);
 
 
 
