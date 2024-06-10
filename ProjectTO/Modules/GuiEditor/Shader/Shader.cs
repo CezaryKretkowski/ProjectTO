@@ -68,7 +68,9 @@ namespace ProjectTO.Modules.GuiEditor.Shader
             foreach (var variaNode in nodes)
             {
 
-                var node = factory.CreateNode(variaNode, new Vector2(variaNode.X, variaNode.Y), this); 
+                var node = factory.CreateNode(variaNode, new Vector2(variaNode.X, variaNode.Y), this);
+                node.Title = variaNode.Name;
+                Console.WriteLine(variaNode.Name);
                 this._nodes.Add(variaNode.guid,node);
             }
 

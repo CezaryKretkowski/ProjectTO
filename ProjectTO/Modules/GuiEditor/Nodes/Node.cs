@@ -15,7 +15,7 @@ public partial class Node
     public NodeDto Entity { get; set; }
     private bool _displaySuMenu = false;
     public Guid Id { get; protected init; }
-    public string Title { get; protected set; } = "New Node";
+    public string Title { get; set; } = "New Node";
     
     public IForm? Output;
 
